@@ -8,7 +8,7 @@ function move() {
 	// Rotate of 30 degrees on the y axis
 	var R1 =  [0.866,	0.0,		0.5,		0.0,
 			   0.0,		1.0,		0.0,		0.0,
-			   -0.5,	0.0,		0.866,		0.0,
+			   0.5,		0.0,		-0.866,		0.0,
 			   0.0,		0.0,		0.0,		1.0];
 			   
 	// Make the starship 2 times bigger
