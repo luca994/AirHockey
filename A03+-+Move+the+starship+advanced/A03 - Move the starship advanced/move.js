@@ -1,3 +1,5 @@
+//qui ha senso utilizzare le funzioni di utils dato che il succo non sono i calcoli ma quali matrici combinare per ottenere la trasformazione voluta
+
 function move() {
 	// Rotate 30 degrees around an arbitrary axis passing through (1,1,0). The x-axis can be aligned to the arbitrary axis after a rotation of 15 (γ) degrees around the z-axis, and then 45 (β) degrees around the y-axis.
 	// T(1,1,0)*Ry(45)*Rz(15)* Rx ( α )⋅ R z ( γ )−1 ⋅ Ry ( β )−1 ⋅ T ( p x , p y , pz )−1
