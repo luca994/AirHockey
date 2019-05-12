@@ -22,6 +22,12 @@ function move() {
 	// S2 = utils.multiplyMatrices(utils.MakeRotateYMatrix(80), S2);
 	S2 = utils.multiplyMatrices(utils.MakeTranslateMatrix(1,2,0), S2);
 
+
+	// var S2 = utils.multiplyMatrices(utils.MakeTranslateMatrix(1,2,0), utils.MakeRotateYMatrix(38));
+	// S2 = utils.multiplyMatrices(S2, utils.MakeScaleNuMatrix(1,1,-1));
+	// S2 = utils.multiplyMatrices(S2, utils.MakeRotateYMatrix(-38));
+	// S2 = utils.multiplyMatrices(S2, utils.MakeTranslateMatrix(-1,2,0));
+
 	// The ship has been doubled in size, rotated 45 degrees around the x axis, 30 degrees around the y axis, and moved to (1,1,-2). Return the ship in its original position
 	//(T(1,1,-2)*Ry(30)*Rx(45)*S(2))^-1
 	var I1 = utils.multiplyMatrices(utils.MakeRotateXMatrix(45), utils.MakeScaleMatrix(2));
