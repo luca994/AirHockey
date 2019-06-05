@@ -12,7 +12,7 @@ function worldViewProjection(carx, cary, carz, cardir, camx, camy, camz, aspectR
 
     // Ry(cardir)*T(carx,cary,carz)^-1
     // console.log(carx + ' ' + cary + ' ' + carz)
-    // 
+    //
     //-175 0 5
     var world = [1, 0, 0, carx,
         0, 1, 0, cary,
@@ -29,7 +29,7 @@ function worldViewProjection(carx, cary, carz, cardir, camx, camy, camz, aspectR
     ];
     // need cross products here:
     // cx=ay∗bz−az∗by, cy=az∗bx−ax∗bz, cz=ax∗by−ay∗bx
-    // but utils makes the calculations with just the tree param vectors
+    // but utils makes the calculations with just the three param vectors
     let viewMatrixPosition = [camx, camy, camz];
     let viewMatrixTarget = [carx, cary, carz];
     let viewMatrixUpVector = [0,1,0];
