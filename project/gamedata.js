@@ -15,7 +15,7 @@
       depth: 0.045
     };
     this.state = GameData.STATES.LOADING;
-    this.camera = GameData.CAMERAS.ANDREA;
+    this.camera = GameData.CAMERAS.LUKE;
     this.luke = {
       score: 0,
       position: {
@@ -52,9 +52,9 @@
   }
 
   GameData.CAMERAS = {
-    LUKE: 0,
-    ANDREA: 1,
-    TOP: 2,
+    ANDREA: 0,
+    TOP: 1,
+    LUKE: 2,
     CUSTOM: 3
   }
 

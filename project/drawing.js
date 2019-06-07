@@ -302,19 +302,19 @@ function loadModel(modelName) {
 }
 
 function doResize() {
-	// set canvas dimensions
-	var canvas = document.getElementById("c");
-	if((window.innerWidth > 40) && (window.innerHeight > 240)) {
-		canvas.width  = window.innerWidth-16;
-		canvas.height = window.innerHeight-200;
-		var w=canvas.clientWidth;
-		var h=canvas.clientHeight;
+  // set canvas dimensions
+  var canvas = document.getElementById("c");
+  if ((window.innerWidth > 40) && (window.innerHeight > 240)) {
+    canvas.width = window.innerWidth - 16;
+    canvas.height = window.innerHeight - 200;
+    var w = canvas.clientWidth;
+    var h = canvas.clientHeight;
 
-		gl.clearColor(1.0, 1.0, 1.0, 1.0);
-		gl.viewport(0.0, 0.0, w, h);
-		aspectRatio = w/h;
-		perspectiveMatrix = utils.MakePerspective(45, w/h, 0.1, 100.0);
-	}
+    gl.clearColor(1.0, 1.0, 1.0, 1.0);
+    gl.viewport(0.0, 0.0, w, h);
+    aspectRatio = w / h;
+    perspectiveMatrix = utils.MakePerspective(45, w / h, 0.1, 100.0);
+  }
 }
 
 
@@ -323,7 +323,7 @@ function initInteraction() {
     var map = {};
     e = e || event; // to deal with IE
     map[e.keyCode] = e.type == 'keydown';
-    const step = 16;
+    const step = 10;
 
     if (map[37]) { // Left arrow
       //	if(moveLight == 0) cx -=delta;
@@ -405,6 +405,12 @@ function initInteraction() {
 function computeMatrices() {
 
   if (gameData.camera == GameData.CAMERAS.ANDREA) {
+    cx = 0;
+    cy = 2.5 + gameData.tableSize.height;
+    cz = gameData.tableSize.depth;
+    elevation = -45.0;
+    angle = 0.0;
+  } else if (gameData.camera == GameData.CAMERAS.TOP) {
     cx = 0.0;
     cy = 5.0;
     cz = 0.0;
@@ -413,11 +419,15 @@ function computeMatrices() {
   } else if (gameData.camera == GameData.CAMERAS.LUKE) {
     cx = 0;
     cy = 2.5 + gameData.tableSize.height;
+    cz = gameData.tableSize.depth - 5.7;
+    elevation = -45.0;
+    angle = -180.0;
+  } else if (gameData.camera == GameData.CAMERAS.CUSTOM) {
+    cx = 0;
+    cy = 2.5 + gameData.tableSize.height;
     cz = gameData.tableSize.depth;
     elevation = -45.0;
     angle = 0.0;
-  } else {
-
   }
 
   viewMatrix = utils.MakeView(cx, cy, cz, elevation, angle);
@@ -537,10 +547,10 @@ function computeNewEvents() {
   }
 
   if (gameData.state === GameData.STATES.GOALSCORED) {
-      gameData.init();
-      gameData.setState(GameData.STATES.PLAYING);
-      simulation.updatePucks();
-      return;
+    gameData.init();
+    gameData.setState(GameData.STATES.PLAYING);
+    simulation.updatePucks();
+    return;
   }
 
 }
