@@ -75,6 +75,8 @@
 
       //update window controls
       window.newGoal(whoScored);
+
+      this.setState(GameData.STATES.GOALSCORED);
     },
 
     init: function() {

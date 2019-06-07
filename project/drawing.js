@@ -532,9 +532,9 @@ function computeNewEvents() {
     simulation.simulate();
   }
 
-  if (model.state === GameData.STATES.GOALSCORED) {
+  if (gameData.state === GameData.STATES.GOALSCORED) {
       gameData.init();
-      model.setState(GameData.STATES.PLAYING);
+      gameData.setState(GameData.STATES.PLAYING);
       simulation.updatePucks();
       return;
   }

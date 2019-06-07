@@ -131,6 +131,7 @@
 					gl.enable(gl.DEPTH_TEST);
 					window.onresize = doResize;
 					perspectiveMatrix = utils.MakePerspective(45, w / h, 0.1, 100.0);
+					doResize();
 
 
 					//Open the json file containing the 3D model to load, parse it to retreive objects' data and creates the VBO and IBO from them The vertex format is (x,y,z,nx,ny,nz,u,v)
