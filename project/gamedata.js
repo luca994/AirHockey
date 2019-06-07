@@ -48,7 +48,7 @@
   GameData.STATES = {
     LOADING: 0,
     PLAYING: 1,
-    RESTING: 2
+    GOALSCORED: 2
   }
 
   GameData.CAMERAS = {
@@ -74,6 +74,8 @@
 
       //update window controls
       window.newGoal(whoScored);
+
+      this.setState(GameData.STATES.GOALSCORED);
     },
 
     init: function() {

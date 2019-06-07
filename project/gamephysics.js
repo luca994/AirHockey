@@ -187,7 +187,7 @@ GamePhysics.prototype = {
         }
     },
 
-    rstPucks: function() {
+    updatePucks: function() {
         for (var i = 0; i < this.pucks.length; ++i) {
             var body = this.pucks[i].body;
             var puck = this.pucks[i].position;
@@ -251,9 +251,7 @@ GamePhysics.prototype = {
         if (c1.type === FixtureTypes.GOAL && c2.type === FixtureTypes.PUCK) {
             setTimeout(function(){
                 contact.m_fixtureB.GetBody().SetActive(false);
-                console.log(me.pucks[0].position);
                 this.gameData.goal(c1.index);
-                console.log(me.pucks[0].position);
             },10);
             return;
         }
