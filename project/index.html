@@ -78,19 +78,19 @@
 								<div class="form-check">
 									<input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting1" value="0" checked="checked">
 									<label class="form-check-label" for="cameraSetting1">
-										Top
+										On Andrea
 									</label>
 								</div>
 								<div class="form-check">
 									<input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting2" value="1">
 									<label class="form-check-label" for="cameraSetting2">
-										On Luke
+										Top
 									</label>
 								</div>
 								<div class="form-check">
 									<input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting3" value="2">
 									<label class="form-check-label" for="cameraSetting3">
-										On Andrea
+										On Luke
 									</label>
 								</div>
 							</div>
@@ -100,6 +100,8 @@
 							<div class="card card-body">
 								<label for="customRange1">Position</label>
 								<input type="range" class="custom-range" min="0" max="5" step="0.5" id="lightPosition">
+								<label for="customRange2" style="margin-top:15px;">Direction</label>
+								<input type="range" class="custom-range" min="0" max="5" step="0.5" id="lightDirection">
 							</div>
 						</div>
 
@@ -182,10 +184,11 @@
 					gameData.camera = Number.parseInt($(this).val());
 				});
 
-				var slider = document.getElementById("lightPosition");
-				console.log("init light: " + slider.value);
-				slider.oninput = function () {
-					console.log("changed light: " + this.value);
+				document.getElementById("lightPosition").oninput = function () {
+					console.log("changed light pos: " + this.value);
+				}
+				document.getElementById("lightDirection").oninput = function () {
+					console.log("changed light dir: " + this.value);
 				}
 
 				window.newGoal = function (who) {

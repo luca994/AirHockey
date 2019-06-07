@@ -14,7 +14,7 @@
       width: 0.3,
       depth: 0.045
     };
-    this.state = 0;
+    this.state = GameData.STATES.LOADING;
     this.numPucks = 1; //simultaneous pucks
     this.camera = GameData.CAMERAS.ANDREA;
     this.lightType = GameData.LIGHTTYPES.SPOT;
@@ -46,7 +46,7 @@
       },
       radius: 0,
     };
-    this.targetScore = 10;
+
     this.puck = {
       position: {
         x: 0,
@@ -64,9 +64,9 @@
   }
 
   GameData.CAMERAS = {
-    LUKE: 0,
-    ANDREA: 1,
-    TOP: 2,
+    ANDREA: 0,
+    TOP: 1,
+    LUKE: 2,
     CUSTOM: 3,
   }
   GameData.LIGHTTYPES = {
