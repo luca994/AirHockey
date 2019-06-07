@@ -14,9 +14,8 @@
       width: 0.3,
       depth: 0.045
     };
-    this.state = 0;
-    this.numPucks = 1; //simultaneous pucks
-    this.camera = GameData.ANDREA;
+    this.state = GameData.STATES.LOADING;
+    this.camera = GameData.CAMERAS.ANDREA;
     this.luke = {
       score: 0,
       position: {
@@ -35,7 +34,7 @@
       },
       radius: 0,
     };
-    this.targetScore = 10;
+
     this.puck = {
       position: {
         x: 0,
