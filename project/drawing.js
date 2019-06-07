@@ -310,108 +310,38 @@ function initInteraction() {
     map[e.keyCode] = e.type == 'keydown';
     const step = 10;
 
-<<<<<<< HEAD
-    if (e.keyCode == 37) { // Left arrow
-      gameData.andrea.position.x += gameData.tableSize.width / 10
-      gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
-    }
-    if (e.keyCode == 39) { // Right arrow
-      gameData.andrea.position.x -= gameData.tableSize.width / 10
-      gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
-    }
-    if (e.keyCode == 38) { // Up arrow
-      gameData.andrea.position.z -= gameData.tableSize.width / 10
-      gameData.andrea.position.z = Math.max(gameData.andrea.position.z, -gameData.tableSize.depth / 2 + gameData.andrea.radius + gameData.goalSize.depth)
-    }
-    if (e.keyCode == 40) { // Down arrow
-      gameData.andrea.position.z += gameData.tableSize.depth / 10
-      gameData.andrea.position.z = Math.min(gameData.andrea.position.z, 0 - gameData.andrea.radius)
-    }
-    if (e.keyCode == 107) { // Add
-    }
-    if (e.keyCode == 109) { // Subtract
-=======
     if (map[37]) { // Left arrow
-      //	if(moveLight == 0) cx -=delta;
-      //	else lightPosition[0] -=delta;
       gameData.andrea.position.x += gameData.tableSize.width / step
       gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
     }
     if (map[39]) { // Right arrow
-      //	if(moveLight == 0)cx  +=delta;
-      //	else lightPosition[0] +=delta;
       gameData.andrea.position.x -= gameData.tableSize.width / step
       gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
     }
     if (map[40]) { // Up arrow
-      //	if(moveLight == 0)  cz-=delta;
-      //	else lightPosition[2] -=delta;
       gameData.andrea.position.z -= gameData.tableSize.width / step
       gameData.andrea.position.z = Math.max(gameData.andrea.position.z, -gameData.tableSize.depth / 2 + gameData.andrea.radius + gameData.goalSize.depth)
     }
     if (map[38]) { // Down arrow
-      //	if(moveLight == 0)  cz+=delta;
-      //	else lightPosition[2] +=delta;
+
       gameData.andrea.position.z += gameData.tableSize.depth / step
       gameData.andrea.position.z = Math.min(gameData.andrea.position.z, 0 - gameData.andrea.radius)
     }
-    if (map[107]) { // Add
-      //	if(moveLight == 0)  cy+=delta;
-      //	else lightPosition[1] +=delta;
-    }
-    if (map[109]) { // Subtract
-      //	if(moveLight == 0)  cy-=delta;
-      //	else lightPosition[1] -=delta;
->>>>>>> fc272b7bf40edc974ea733287c367f3f940bd20a
-    }
 
     if (map[65]) { // a
-      //	if(moveLight == 0)angle-=delta * 10.0;
-      //	else{
-      //		lightDirection[0] -= 0.1 * Math.cos(utils.degToRad(angle));
-      //		lightDirection[2] -= 0.1 * Math.sin(utils.degToRad(angle));
-      //	}
       gameData.luke.position.x -= gameData.tableSize.width / step
       gameData.luke.position.x = Math.max(-gameData.tableSize.width / 2 + gameData.luke.radius, gameData.luke.position.x)
     }
-<<<<<<< HEAD
-    if (e.keyCode == 68) { // d
-      gameData.luke.position.x += gameData.tableSize.width / 10
-      gameData.luke.position.x = Math.min(gameData.luke.position.x, gameData.tableSize.width / 2 - gameData.luke.radius)
-    }
-    if (e.keyCode == 87) { // w
-      gameData.luke.position.z -= gameData.tableSize.depth / 10
-      gameData.luke.position.z = Math.max(0.0 + gameData.luke.radius, gameData.luke.position.z)
-    }
-    if (e.keyCode == 83) { // s
-      gameData.luke.position.z += gameData.tableSize.depth / 10
-=======
     if (map[68]) { // d
-      //	if(moveLight == 0)angle+=delta * 10.0;
-      //	else{
-      //		lightDirection[0] += 0.1 * Math.cos(utils.degToRad(angle));
-      //		lightDirection[2] += 0.1 * Math.sin(utils.degToRad(angle));
-      //	}
       gameData.luke.position.x += gameData.tableSize.width / step
       gameData.luke.position.x = Math.min(gameData.luke.position.x, gameData.tableSize.width / 2 - gameData.luke.radius)
     }
     if (map[87]) { // w
-      //	if(moveLight == 0)elevation+=delta * 10.0;
-      //	else{
-      //		lightDirection[0] += 0.1 * Math.sin(utils.degToRad(angle));
-      //		lightDirection[2] -= 0.1 * Math.cos(utils.degToRad(angle));
-      //	}
       gameData.luke.position.z -= gameData.tableSize.depth / step
       gameData.luke.position.z = Math.max(0.0 + gameData.luke.radius, gameData.luke.position.z)
     }
     if (map[83]) { // s
-      //	if(moveLight == 0)elevation-=delta*10.0;
-      //	else{
-      //		lightDirection[0] -= 0.1 * Math.sin(utils.degToRad(angle));
-      //		lightDirection[2] += 0.1 * Math.cos(utils.degToRad(angle));
-      //	}
       gameData.luke.position.z += gameData.tableSize.depth / step
->>>>>>> fc272b7bf40edc974ea733287c367f3f940bd20a
       gameData.luke.position.z = Math.min(gameData.luke.position.z, gameData.tableSize.depth / 2 - gameData.luke.radius - gameData.goalSize.depth)
     }
     //console.log(" ("+cx + "/" + cy + "/" + cz + ") - "+ elevation + "." + angle);
