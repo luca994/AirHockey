@@ -48,7 +48,7 @@
   GameData.STATES = {
     LOADING: 0,
     PLAYING: 1,
-    RESTING: 2
+    GOALSCORED: 2
   }
 
   GameData.CAMERAS = {

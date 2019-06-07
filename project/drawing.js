@@ -302,6 +302,22 @@ function loadModel(modelName) {
   });
 }
 
+function doResize() {
+	// set canvas dimensions
+	var canvas = document.getElementById("c");
+	if((window.innerWidth > 40) && (window.innerHeight > 240)) {
+		canvas.width  = window.innerWidth-16;
+		canvas.height = window.innerHeight-200;
+		var w=canvas.clientWidth;
+		var h=canvas.clientHeight;
+
+		gl.clearColor(1.0, 1.0, 1.0, 1.0);
+		gl.viewport(0.0, 0.0, w, h);
+		aspectRatio = w/h;
+		perspectiveMatrix = utils.MakePerspective(45, w/h, 0.1, 100.0);
+	}
+}
+
 
 function initInteraction() {
   var keyFunction = function(e) {
@@ -515,6 +531,13 @@ function computeNewEvents() {
   if (gameData.state === GameData.STATES.PLAYING) {
     simulation.updatePaddles();
     simulation.simulate();
+  }
+
+  if (model.state === GameData.STATES.GOALSCORED) {
+      gameData.init();
+      model.setState(GameData.STATES.PLAYING);
+      simulation.updatePucks();
+      return;
   }
 
 }

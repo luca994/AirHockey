@@ -11,5 +11,8 @@
     "start": "http-server -c-1 -p 8887"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^0.11.1"
+  }
 }
