@@ -16,7 +16,8 @@
     };
     this.state = 0;
     this.numPucks = 1; //simultaneous pucks
-    this.playerA = {
+    this.camera = GameData.ANDREA;
+    this.luke = {
       score: 0,
       position: {
         x: 0,
@@ -25,7 +26,7 @@
       },
       radius: 0
     };
-    this.playerB = {
+    this.andrea = {
       score: 0,
       position: {
         x: 0,
@@ -65,7 +66,7 @@
 
     goal: function(whoScored) {
       //update scores
-      whoScored == 1 ? this.playerA.score++ : this.playerB.score++;
+      whoScored == 1 ? this.luke.score++ : this.andrea.score++;
 
       //reset puck
       this.puck.position.x = 0;
@@ -80,14 +81,14 @@
       this.tableSize.width = 1.54
       this.tableSize.depth = 2.865
       this.tableSize.height = 1.117
-      this.playerA.position.x = 0.0;
-      this.playerA.position.y = this.tableSize.height;
-      this.playerA.position.z = this.tableSize.depth * 0.25;
-      this.playerB.position.x = 0.0;
-      this.playerB.position.y = this.tableSize.height;
-      this.playerB.position.z = -this.tableSize.depth * 0.25;
-      this.playerA.radius = 0.077;
-      this.playerB.radius = 0.077;
+      this.luke.position.x = 0.0;
+      this.luke.position.y = this.tableSize.height;
+      this.luke.position.z = this.tableSize.depth * 0.25;
+      this.andrea.position.x = 0.0;
+      this.andrea.position.y = this.tableSize.height;
+      this.andrea.position.z = -this.tableSize.depth * 0.25;
+      this.luke.radius = 0.077;
+      this.andrea.radius = 0.077;
       this.puck.radius = 0.0539;
       this.puck.position.x = 0;
       this.puck.position.y = this.tableSize.height;

@@ -309,26 +309,26 @@ function initInteraction() {
     if (e.keyCode == 37) { // Left arrow
       //	if(moveLight == 0) cx -=delta;
       //	else lightPosition[0] -=delta;
-      gameData.playerB.position.x += gameData.tableSize.width / 10
-      gameData.playerB.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.playerB.radius, gameData.playerB.position.x), gameData.tableSize.width / 2 - gameData.playerB.radius)
+      gameData.andrea.position.x += gameData.tableSize.width / 10
+      gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
     }
     if (e.keyCode == 39) { // Right arrow
       //	if(moveLight == 0)cx  +=delta;
       //	else lightPosition[0] +=delta;
-      gameData.playerB.position.x -= gameData.tableSize.width / 10
-      gameData.playerB.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.playerB.radius, gameData.playerB.position.x), gameData.tableSize.width / 2 - gameData.playerB.radius)
+      gameData.andrea.position.x -= gameData.tableSize.width / 10
+      gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
     }
     if (e.keyCode == 38) { // Up arrow
       //	if(moveLight == 0)  cz-=delta;
       //	else lightPosition[2] -=delta;
-      gameData.playerB.position.z -= gameData.tableSize.width / 10
-      gameData.playerB.position.z = Math.max(gameData.playerB.position.z, -gameData.tableSize.depth / 2 + gameData.playerB.radius + gameData.goalSize.depth)
+      gameData.andrea.position.z -= gameData.tableSize.width / 10
+      gameData.andrea.position.z = Math.max(gameData.andrea.position.z, -gameData.tableSize.depth / 2 + gameData.andrea.radius + gameData.goalSize.depth)
     }
     if (e.keyCode == 40) { // Down arrow
       //	if(moveLight == 0)  cz+=delta;
       //	else lightPosition[2] +=delta;
-      gameData.playerB.position.z += gameData.tableSize.depth / 10
-      gameData.playerB.position.z = Math.min(gameData.playerB.position.z, 0 - gameData.playerB.radius)
+      gameData.andrea.position.z += gameData.tableSize.depth / 10
+      gameData.andrea.position.z = Math.min(gameData.andrea.position.z, 0 - gameData.andrea.radius)
     }
     if (e.keyCode == 107) { // Add
       //	if(moveLight == 0)  cy+=delta;
@@ -345,8 +345,8 @@ function initInteraction() {
       //		lightDirection[0] -= 0.1 * Math.cos(utils.degToRad(angle));
       //		lightDirection[2] -= 0.1 * Math.sin(utils.degToRad(angle));
       //	}
-      gameData.playerA.position.x -= gameData.tableSize.width / 10
-      gameData.playerA.position.x = Math.max(-gameData.tableSize.width / 2 + gameData.playerA.radius, gameData.playerA.position.x)
+      gameData.luke.position.x -= gameData.tableSize.width / 10
+      gameData.luke.position.x = Math.max(-gameData.tableSize.width / 2 + gameData.luke.radius, gameData.luke.position.x)
     }
     if (e.keyCode == 68) { // d
       //	if(moveLight == 0)angle+=delta * 10.0;
@@ -354,8 +354,8 @@ function initInteraction() {
       //		lightDirection[0] += 0.1 * Math.cos(utils.degToRad(angle));
       //		lightDirection[2] += 0.1 * Math.sin(utils.degToRad(angle));
       //	}
-      gameData.playerA.position.x += gameData.tableSize.width / 10
-      gameData.playerA.position.x = Math.min(gameData.playerA.position.x, gameData.tableSize.width / 2 - gameData.playerA.radius)
+      gameData.luke.position.x += gameData.tableSize.width / 10
+      gameData.luke.position.x = Math.min(gameData.luke.position.x, gameData.tableSize.width / 2 - gameData.luke.radius)
     }
     if (e.keyCode == 87) { // w
       //	if(moveLight == 0)elevation+=delta * 10.0;
@@ -363,8 +363,8 @@ function initInteraction() {
       //		lightDirection[0] += 0.1 * Math.sin(utils.degToRad(angle));
       //		lightDirection[2] -= 0.1 * Math.cos(utils.degToRad(angle));
       //	}
-      gameData.playerA.position.z -= gameData.tableSize.depth / 10
-      gameData.playerA.position.z = Math.max(0.0 + gameData.playerA.radius, gameData.playerA.position.z)
+      gameData.luke.position.z -= gameData.tableSize.depth / 10
+      gameData.luke.position.z = Math.max(0.0 + gameData.luke.radius, gameData.luke.position.z)
     }
     if (e.keyCode == 83) { // s
       //	if(moveLight == 0)elevation-=delta*10.0;
@@ -372,13 +372,12 @@ function initInteraction() {
       //		lightDirection[0] -= 0.1 * Math.sin(utils.degToRad(angle));
       //		lightDirection[2] += 0.1 * Math.cos(utils.degToRad(angle));
       //	}
-      gameData.playerA.position.z += gameData.tableSize.depth / 10
-      gameData.playerA.position.z = Math.min(gameData.playerA.position.z, gameData.tableSize.depth / 2 - gameData.playerA.radius - gameData.goalSize.depth)
+      gameData.luke.position.z += gameData.tableSize.depth / 10
+      gameData.luke.position.z = Math.min(gameData.luke.position.z, gameData.tableSize.depth / 2 - gameData.luke.radius - gameData.goalSize.depth)
     }
     //console.log(" ("+cx + "/" + cy + "/" + cz + ") - "+ elevation + "." + angle);
   }
 
-  //'window' is a JavaScript object (if "canvas", it will not work)
   window.addEventListener("keyup", keyFunction, false);
 }
 
@@ -412,14 +411,14 @@ function computeMatrices() {
   objectWorldMatrix[3] = utils.MakeWorld(0.0, gameData.tableSize.height, 0.0, 90.0, 0.0, 0.0, 0.196)
 
   /* PADDLE PLAYER 1 */
-  objectWorldMatrix[4] = utils.MakeWorld(gameData.playerA.position.x,
-    gameData.playerA.position.y,
-    gameData.playerA.position.z,
+  objectWorldMatrix[4] = utils.MakeWorld(gameData.luke.position.x,
+    gameData.luke.position.y,
+    gameData.luke.position.z,
     0.0, 0.0, 0.0, 0.077)
   /* PADDLE PLAYER 2 */
-  objectWorldMatrix[5] = utils.MakeWorld(gameData.playerB.position.x,
-    gameData.playerB.position.y,
-    gameData.playerB.position.z,
+  objectWorldMatrix[5] = utils.MakeWorld(gameData.andrea.position.x,
+    gameData.andrea.position.y,
+    gameData.andrea.position.z,
     0.0, 0.0, 0.0, 0.077)
   /* PUCK */
   objectWorldMatrix[6] = utils.MakeWorld(gameData.puck.position.x,

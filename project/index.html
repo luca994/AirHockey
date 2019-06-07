@@ -186,14 +186,12 @@
 				}
 
 				window.newGoal = function (who) {
-					console.log(gameData.playerA.score)
-		      console.log(gameData.playerB.score)
 					if (who == 1) {
 						fadeIn(document.getElementById("luke_btn"));
-						document.getElementById("luke_points").innerHTML = gameData.playerA.score;
+						document.getElementById("luke_points").innerHTML = gameData.luke.score;
 					} else {
 						fadeIn(document.getElementById("andrea_btn"));
-						document.getElementById("andrea_points").innerHTML = gameData.playerB.score;
+						document.getElementById("andrea_points").innerHTML = gameData.andrea.score;
 					}
 				}
 			});

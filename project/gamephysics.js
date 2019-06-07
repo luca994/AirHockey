@@ -40,7 +40,6 @@ GamePhysics = function(gameData) {
         fixtureDef.userData = {type: FixtureTypes.EDGE};
 
         ground.CreateFixture(fixtureDef) ;
-
     }
 
     function addCornerEdge(x, y, angle, radius){
@@ -120,9 +119,8 @@ GamePhysics = function(gameData) {
     this.addPuck(gameData.puck);
 
     //add paddles
-    this.addPaddle(gameData.playerA.position, gameData.playerA.radius);
-    this.addPaddle(gameData.playerB.position, gameData.playerB.radius);
-
+    this.addPaddle(gameData.luke.position, gameData.luke.radius);
+    this.addPaddle(gameData.andrea.position, gameData.andrea.radius);
 }
 
 GamePhysics.prototype = {
