@@ -31,18 +31,6 @@ var materialSpecColorHandle = new Array(2);
 var materialSpecPowerHandle = new Array(2);
 var objectSpecularPower = 20.0;
 
-//Parameters for light definition (directional light)
-var dirLightAlpha = -utils.degToRad(60);
-var dirLightBeta = -utils.degToRad(120);
-//Use the Utils 0.2 to use mat3
-var lightDirection = [Math.cos(dirLightAlpha) * Math.cos(dirLightBeta),
-  Math.sin(dirLightAlpha),
-  Math.cos(dirLightAlpha) * Math.sin(dirLightBeta),
-];
-var lightPosition = [0.0, 3.0, 0.0];
-var lightColor = new Float32Array([1.0, 1.0, 1.0, 1.0]);
-var moveLight = 0; //0 : move the camera - 1 : Move the lights
-
 var sceneObjects = 0; //total number of nodes
 var currentLoadedObj = 0;
 
@@ -74,8 +62,6 @@ var observerPositionObj = new Array();
 var lightDirectionObj = new Array();
 var lightPositionObj = new Array();
 
-var currentLightType = 1;
-var currentShader = 0;
 var textureInfluence = 0.0;
 var ambientLightInfluence = 1.0;
 var ambientLightColor = [1.0, 1.0, 1.0, 1.0];
@@ -156,7 +142,6 @@ function loadShaders() {
   }
 
 }
-
 
 
 function loadModel(modelName) {
@@ -323,36 +308,24 @@ function initInteraction() {
   var keyFunction = function(e) {
 
     if (e.keyCode == 37) { // Left arrow
-      //	if(moveLight == 0) cx -=delta;
-      //	else lightPosition[0] -=delta;
       gameData.andrea.position.x += gameData.tableSize.width / 10
       gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
     }
     if (e.keyCode == 39) { // Right arrow
-      //	if(moveLight == 0)cx  +=delta;
-      //	else lightPosition[0] +=delta;
       gameData.andrea.position.x -= gameData.tableSize.width / 10
       gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
     }
     if (e.keyCode == 38) { // Up arrow
-      //	if(moveLight == 0)  cz-=delta;
-      //	else lightPosition[2] -=delta;
       gameData.andrea.position.z -= gameData.tableSize.width / 10
       gameData.andrea.position.z = Math.max(gameData.andrea.position.z, -gameData.tableSize.depth / 2 + gameData.andrea.radius + gameData.goalSize.depth)
     }
     if (e.keyCode == 40) { // Down arrow
-      //	if(moveLight == 0)  cz+=delta;
-      //	else lightPosition[2] +=delta;
       gameData.andrea.position.z += gameData.tableSize.depth / 10
       gameData.andrea.position.z = Math.min(gameData.andrea.position.z, 0 - gameData.andrea.radius)
     }
     if (e.keyCode == 107) { // Add
-      //	if(moveLight == 0)  cy+=delta;
-      //	else lightPosition[1] +=delta;
     }
     if (e.keyCode == 109) { // Subtract
-      //	if(moveLight == 0)  cy-=delta;
-      //	else lightPosition[1] -=delta;
     }
 
     if (e.keyCode == 65) { // a
@@ -365,29 +338,14 @@ function initInteraction() {
       gameData.luke.position.x = Math.max(-gameData.tableSize.width / 2 + gameData.luke.radius, gameData.luke.position.x)
     }
     if (e.keyCode == 68) { // d
-      //	if(moveLight == 0)angle+=delta * 10.0;
-      //	else{
-      //		lightDirection[0] += 0.1 * Math.cos(utils.degToRad(angle));
-      //		lightDirection[2] += 0.1 * Math.sin(utils.degToRad(angle));
-      //	}
       gameData.luke.position.x += gameData.tableSize.width / 10
       gameData.luke.position.x = Math.min(gameData.luke.position.x, gameData.tableSize.width / 2 - gameData.luke.radius)
     }
     if (e.keyCode == 87) { // w
-      //	if(moveLight == 0)elevation+=delta * 10.0;
-      //	else{
-      //		lightDirection[0] += 0.1 * Math.sin(utils.degToRad(angle));
-      //		lightDirection[2] -= 0.1 * Math.cos(utils.degToRad(angle));
-      //	}
       gameData.luke.position.z -= gameData.tableSize.depth / 10
       gameData.luke.position.z = Math.max(0.0 + gameData.luke.radius, gameData.luke.position.z)
     }
     if (e.keyCode == 83) { // s
-      //	if(moveLight == 0)elevation-=delta*10.0;
-      //	else{
-      //		lightDirection[0] -= 0.1 * Math.sin(utils.degToRad(angle));
-      //		lightDirection[2] += 0.1 * Math.cos(utils.degToRad(angle));
-      //	}
       gameData.luke.position.z += gameData.tableSize.depth / 10
       gameData.luke.position.z = Math.min(gameData.luke.position.z, gameData.tableSize.depth / 2 - gameData.luke.radius - gameData.goalSize.depth)
     }
@@ -446,9 +404,9 @@ function computeMatrices() {
     projectionMatrix[i] = utils.multiplyMatrices(viewMatrix, objectWorldMatrix[i]);
     projectionMatrix[i] = utils.multiplyMatrices(perspectiveMatrix, projectionMatrix[i]);
 
-    lightDirectionObj[i] = utils.multiplyMatrix3Vector3(utils.transposeMatrix3(utils.sub3x3from4x4(objectWorldMatrix[i])), lightDirection);
+    lightDirectionObj[i] = utils.multiplyMatrix3Vector3(utils.transposeMatrix3(utils.sub3x3from4x4(objectWorldMatrix[i])), gameData.lightDirection);
 
-    lightPositionObj[i] = utils.multiplyMatrix3Vector3(utils.invertMatrix3(utils.sub3x3from4x4(objectWorldMatrix[i])), lightPosition);
+    lightPositionObj[i] = utils.multiplyMatrix3Vector3(utils.invertMatrix3(utils.sub3x3from4x4(objectWorldMatrix[i])), gameData.lightPosition);
 
     observerPositionObj[i] = utils.multiplyMatrix3Vector3(utils.invertMatrix3(utils.sub3x3from4x4(objectWorldMatrix[i])), eyeTemp);
   }
@@ -463,59 +421,59 @@ function drawScene() {
 
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  gl.useProgram(shaderProgram[currentShader]);
+  gl.useProgram(shaderProgram[gameData.Shader]);
 
   for (i = 0; i < sceneObjects; i++) {
-    gl.uniformMatrix4fv(matrixPositionHandle[currentShader], gl.FALSE, utils.transposeMatrix(projectionMatrix[i]));
+    gl.uniformMatrix4fv(matrixPositionHandle[gameData.Shader], gl.FALSE, utils.transposeMatrix(projectionMatrix[i]));
 
-    gl.uniform1f(textureInfluenceHandle[currentShader], textureInfluence);
-    gl.uniform1f(ambientLightInfluenceHandle[currentShader], ambientLightInfluence);
+    gl.uniform1f(textureInfluenceHandle[gameData.Shader], textureInfluence);
+    gl.uniform1f(ambientLightInfluenceHandle[gameData.Shader], ambientLightInfluence);
 
-    gl.uniform1i(textureFileHandle[currentShader], 0); //Texture channel 0 used for diff txt
+    gl.uniform1i(textureFileHandle[gameData.Shader], 0); //Texture channel 0 used for diff txt
     if (nTexture[i] == true && diffuseTextureObj[i].webglTexture) {
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, diffuseTextureObj[i].webglTexture);
     }
 
-    gl.uniform4f(lightColorHandle[currentShader], lightColor[0], lightColor[1], lightColor[2], lightColor[3]);
-    gl.uniform4f(materialDiffColorHandle[currentShader], diffuseColor[i][0], diffuseColor[i][1], diffuseColor[i][2], diffuseColor[i][3]);
+    gl.uniform4f(lightColorHandle[gameData.Shader], gameData.lightColor[0], gameData.lightColor[1], gameData.lightColor[2], gameData.lightColor[3]);
+    gl.uniform4f(materialDiffColorHandle[gameData.Shader], diffuseColor[i][0], diffuseColor[i][1], diffuseColor[i][2], diffuseColor[i][3]);
 
-    gl.uniform4f(materialSpecColorHandle[currentShader], specularColor[i][0], specularColor[i][1], specularColor[i][2], specularColor[i][3]);
-    gl.uniform4f(ambientLightColorHandle[currentShader], ambientLightColor[0], ambientLightColor[1], ambientLightColor[2], ambientLightColor[3]);
+    gl.uniform4f(materialSpecColorHandle[gameData.Shader], specularColor[i][0], specularColor[i][1], specularColor[i][2], specularColor[i][3]);
+    gl.uniform4f(ambientLightColorHandle[gameData.Shader], ambientLightColor[0], ambientLightColor[1], ambientLightColor[2], ambientLightColor[3]);
 
-    gl.uniform1f(materialSpecPowerHandle[currentShader], objectSpecularPower);
+    gl.uniform1f(materialSpecPowerHandle[gameData.Shader], objectSpecularPower);
 
 
-    gl.uniform3f(lightDirectionHandle[currentShader], lightDirectionObj[i][0],
+    gl.uniform3f(lightDirectionHandle[gameData.Shader], lightDirectionObj[i][0],
       lightDirectionObj[i][1],
       lightDirectionObj[i][2]);
-    gl.uniform3f(lightPositionHandle[currentShader], lightPositionObj[i][0],
+    gl.uniform3f(lightPositionHandle[gameData.Shader], lightPositionObj[i][0],
       lightPositionObj[i][1],
       lightPositionObj[i][2]);
 
-    gl.uniform1i(lightTypeHandle[currentShader], currentLightType);
+    gl.uniform1i(lightTypeHandle[gameData.Shader], gameData.lightType);
 
-    gl.uniform3f(eyePositionHandle[currentShader], observerPositionObj[i][0],
+    gl.uniform3f(eyePositionHandle[gameData.Shader], observerPositionObj[i][0],
       observerPositionObj[i][1],
       observerPositionObj[i][2]);
 
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBufferObjectId[i]);
 
-    gl.enableVertexAttribArray(vertexPositionHandle[currentShader]);
-    gl.vertexAttribPointer(vertexPositionHandle[currentShader], 3, gl.FLOAT, gl.FALSE, 4 * 8, 0);
+    gl.enableVertexAttribArray(vertexPositionHandle[gameData.Shader]);
+    gl.vertexAttribPointer(vertexPositionHandle[gameData.Shader], 3, gl.FLOAT, gl.FALSE, 4 * 8, 0);
 
-    gl.enableVertexAttribArray(vertexNormalHandle[currentShader]);
-    gl.vertexAttribPointer(vertexNormalHandle[currentShader], 3, gl.FLOAT, gl.FALSE, 4 * 8, 4 * 3);
+    gl.enableVertexAttribArray(vertexNormalHandle[gameData.Shader]);
+    gl.vertexAttribPointer(vertexNormalHandle[gameData.Shader], 3, gl.FLOAT, gl.FALSE, 4 * 8, 4 * 3);
 
-    gl.vertexAttribPointer(vertexUVHandle[currentShader], 2, gl.FLOAT, gl.FALSE, 4 * 8, 4 * 6);
-    gl.enableVertexAttribArray(vertexUVHandle[currentShader]);
+    gl.vertexAttribPointer(vertexUVHandle[gameData.Shader], 2, gl.FLOAT, gl.FALSE, 4 * 8, 4 * 6);
+    gl.enableVertexAttribArray(vertexUVHandle[gameData.Shader]);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBufferObjectId[i]);
     gl.drawElements(gl.TRIANGLES, facesNumber[i] * 3, gl.UNSIGNED_SHORT, 0);
 
-    gl.disableVertexAttribArray(vertexPositionHandle[currentShader]);
-    gl.disableVertexAttribArray(vertexNormalHandle[currentShader]);
+    gl.disableVertexAttribArray(vertexPositionHandle[gameData.Shader]);
+    gl.disableVertexAttribArray(vertexNormalHandle[gameData.Shader]);
   }
 
 

@@ -16,7 +16,18 @@
     };
     this.state = 0;
     this.numPucks = 1; //simultaneous pucks
-    this.camera = GameData.ANDREA;
+    this.camera = GameData.CAMERAS.ANDREA;
+    this.lightType = GameData.LIGHTTYPES.SPOT;
+    this.lightPosition = [0.0,0.5,0.0];
+    var dirLightAlpha = -utils.degToRad(90);
+    var dirLightBeta = 0;
+    this.lightDirection =
+    [ Math.cos(dirLightAlpha) * Math.cos(dirLightBeta),
+      Math.sin(dirLightAlpha),
+      Math.cos(dirLightAlpha) * Math.sin(dirLightBeta),
+    ];
+    this.lightColor = new Float32Array([1.0, 1.0, 1.0, 1.0]);
+    this.Shader = GameData.SHADER.GOUREAUD;
     this.luke = {
       score: 0,
       position: {
@@ -49,14 +60,24 @@
   GameData.STATES = {
     LOADING: 0,
     PLAYING: 1,
-    GOALSCORED: 2
+    GOALSCORED: 2,
   }
 
   GameData.CAMERAS = {
     LUKE: 0,
     ANDREA: 1,
     TOP: 2,
-    CUSTOM: 3
+    CUSTOM: 3,
+  }
+  GameData.LIGHTTYPES = {
+    DIRECTIONAL: 1,
+    POINT: 2,
+    POINT_DECAY: 3,
+    SPOT: 4,
+  }
+  GameData.SHADER = {
+    GOUREAUD: 0,
+    PHONG: 1,
   }
 
   GameData.prototype = {
