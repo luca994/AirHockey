@@ -8,6 +8,7 @@
 		<script type="text/javascript" src="gamedata.js"></script>
 		<script type="text/javascript" src="gamephysics.js"></script>
 		<script type="text/javascript" src="drawing.js"></script>
+		<script src="jscolor.js"></script>
 
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -32,6 +33,7 @@
 				margin: 0;
 				width: 100%;
 				height: 100%;
+				overflow: hidden;
 			}
 		</style>
 	</head>
@@ -99,108 +101,113 @@
 						<div class="collapse" id="multiCollapseExample2">
 							<div class="card card-body">
 								<label for="customRange1">Position</label>
-								<input type="range" class="custom-range" min="0" max="5" step="0.5" id="lightPosition">
+								<input type="range" class="custom-range" min="0" max="5" step="0.1" id="lightPosition">
 								<label for="customRange2" style="margin-top:15px;">Direction</label>
-								<input type="range" class="custom-range" min="0" max="5" step="0.5" id="lightDirection">
+								<input type="range" class="custom-range" min="0" max="180" step="10" id="lightDirection">
+								<input class="jscolor" onchange="update(this.jscolor)" value="cc66ff">
+								<p id="rect" style="border:1px solid gray; width:161px; height:100px;"></div>
 							</div>
-						</div>
 
+						</div>
 					</div>
 				</div>
+
 			</div>
 
-		</div>
+			<script src="//code.jquery.com/jquery-3.3.1.js"></script>
+			<script src="//cdn.rawgit.com/twbs/bootstrap/v4.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-		<script>
-			function init() {
-				canvas = document.getElementById("c");
-				try {
-					//get Canvas without aplpha channel
-					gl = canvas.getContext("webgl2", {alpha: false});
-				} catch (e) {
-					console.log(e);
-				}
-				if (gl) {
-					//Setting the size for the canvas equal to half the browser window and other useful parameters
-					var w = canvas.clientWidth;
-					var h = canvas.clientHeight;
-					gl.clearColor(1.0, 1.0, 1.0, 1.0);
-					gl.viewport(0.0, 0.0, w, h);
-					gl.enable(gl.DEPTH_TEST);
-					window.onresize = doResize;
-					perspectiveMatrix = utils.MakePerspective(45, w / h, 0.1, 100.0);
-					doResize();
-
-
-					//Open the json file containing the 3D model to load, parse it to retreive objects' data and creates the VBO and IBO from them The vertex format is (x,y,z,nx,ny,nz,u,v)
-					loadModel("table.json");
-					loadModel("paddle.json");
-					loadModel("paddle.json");
-					loadModel("puck.json");
-
-					gameData.init();
-					simulation = new GamePhysics(gameData);
-					gameData.setState(GameData.STATES.PLAYING);
-
-					loadShaders();
-
-					//Setting up the interaction using keys
-					initInteraction();
-
-					//Rendering cycle
-					drawScene();
-
-				} else {
-					alert("Error: Your browser does not appear to support WebGL.");
-				}
-			}
-			window.onload = init;
-
-
-			////////////////////////////////////////////////////////////////////////////////////////
-			/////////////////////////// Game Controls //////////////////////////////////////////////
-
-			function fadeIn(element) {
-				var op = 0.1; // initial opacity
-				element.style.display = 'block';
-				var timer = setInterval(function () {
-					if (op >= 1) {
-						clearInterval(timer);
+			<script>
+				function init() {
+					canvas = document.getElementById("c");
+					try {
+						//get Canvas without aplpha channel
+						gl = canvas.getContext("webgl2", {alpha: false});
+					} catch (e) {
+						console.log(e);
 					}
-					element.style.opacity = op;
-					element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-					op += op * 0.1;
-				}, 25);
-			}
+					if (gl) {
+						//Setting the size for the canvas equal to half the browser window and other useful parameters
+						var w = canvas.clientWidth;
+						var h = canvas.clientHeight;
+						gl.clearColor(1.0, 1.0, 1.0, 1.0);
+						gl.viewport(0.0, 0.0, w, h);
+						gl.enable(gl.DEPTH_TEST);
+						window.onresize = doResize;
+						perspectiveMatrix = utils.MakePerspective(45, w / h, 0.1, 100.0);
+						doResize();
 
-			$(document).ready(function () {
+						//Open the json file containing the 3D model to load, parse it to retreive objects' data and creates the VBO and IBO from them The vertex format is (x,y,z,nx,ny,nz,u,v)
+						loadModel("table.json");
+						loadModel("paddle.json");
+						loadModel("paddle.json");
+						loadModel("puck.json");
 
-				$('input:radio[name=cameraSetting]').change(function () {
-					console.log($(this).val());
-					gameData.camera = Number.parseInt($(this).val());
-				});
+						gameData.init();
+						simulation = new GamePhysics(gameData);
+						gameData.setState(GameData.STATES.PLAYING);
 
-				document.getElementById("lightPosition").oninput = function () {
-					console.log("changed light pos: " + this.value);
-				}
-				document.getElementById("lightDirection").oninput = function () {
-					console.log("changed light dir: " + this.value);
-				}
+						loadShaders();
 
-				window.newGoal = function (who) {
-					if (who == 1) {
-						fadeIn(document.getElementById("luke_btn"));
-						document.getElementById("luke_points").innerHTML = gameData.luke.score;
+						//Setting up the interaction using keys
+						initInteraction();
+
+						//Rendering cycle
+						drawScene();
+
 					} else {
-						fadeIn(document.getElementById("andrea_btn"));
-						document.getElementById("andrea_points").innerHTML = gameData.andrea.score;
+						alert("Error: Your browser does not appear to support WebGL.");
 					}
 				}
-			});
-		</script>
-	</body>
-</html>
+				window.onload = init;
+
+				//////////////////////////////////////////////////////////////////////////////////////// /////////////// Game Controls //////////////////////////////////
+
+				function fadeIn(element) {
+					var op = 0.1; // initial opacity
+					element.style.display = 'block';
+					var timer = setInterval(function () {
+						if (op >= 1) {
+							clearInterval(timer);
+						}
+						element.style.opacity = op;
+						element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+						op += op * 0.1;
+					}, 25);
+				}
+
+				function update(jscolor) {
+					document.getElementById('rect').style.backgroundColor = '#' + jscolor
+					console.log(jscolor.rgb[0] + jscolor.rgb[1] + jscolor.rgb[2])
+					gameData.lightPosition = [jscolor.rgb[0], jscolor.rgb[1], jscolor.rgb[2]]
+				}
+
+				$(document).ready(function () {
+
+					$('input:radio[name=cameraSetting]').change(function () {
+						console.log($(this).val());
+						gameData.camera = Number.parseInt($(this).val());
+					});
+
+					document.getElementById("lightPosition").oninput = function () {
+						console.log("changed light pos: " + this.value);
+						gameData.lightPosition = [0.0, this.value, 0.0];
+					}
+					document.getElementById("lightDirection").oninput = function () {
+						console.log("changed light dir: " + this.value);
+						gameData.updateLightDir(-utils.degToRad(this.value));
+					}
+
+					window.newGoal = function (who) {
+						if (who == 1) {
+							fadeIn(document.getElementById("luke_btn"));
+							document.getElementById("luke_points").innerHTML = gameData.luke.score;
+						} else {
+							fadeIn(document.getElementById("andrea_btn"));
+							document.getElementById("andrea_points").innerHTML = gameData.andrea.score;
+						}
+					}
+				});
+			</script>
+		</body>
+	</html>

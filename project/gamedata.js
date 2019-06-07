@@ -15,16 +15,14 @@
       depth: 0.045
     };
     this.state = GameData.STATES.LOADING;
-    this.numPucks = 1; //simultaneous pucks
     this.camera = GameData.CAMERAS.ANDREA;
     this.lightType = GameData.LIGHTTYPES.SPOT;
-    this.lightPosition = [0.0,0.5,0.0];
-    var dirLightAlpha = -utils.degToRad(90);
-    var dirLightBeta = 0;
-    this.lightDirection =
-    [ Math.cos(dirLightAlpha) * Math.cos(dirLightBeta),
-      Math.sin(dirLightAlpha),
-      Math.cos(dirLightAlpha) * Math.sin(dirLightBeta),
+    this.lightPosition = [0.0, 0.5, 0.0];
+    this.dirLightAlpha = -utils.degToRad(90);
+    this.dirLightBeta = 0;
+    this.lightDirection = [Math.cos(this.dirLightAlpha) * Math.cos(this.dirLightBeta),
+      Math.sin(this.dirLightAlpha),
+      Math.cos(this.dirLightAlpha) * Math.sin(this.dirLightBeta),
     ];
     this.lightColor = new Float32Array([1.0, 1.0, 1.0, 1.0]);
     this.Shader = GameData.SHADER.PHONG;
@@ -98,6 +96,14 @@
       window.newGoal(whoScored);
 
       this.setState(GameData.STATES.GOALSCORED);
+    },
+
+    updateLightDir: function(newVal) {
+      this.dirLightAlpha = newVal;
+      this.lightDirection = [Math.cos(this.dirLightAlpha) * Math.cos(this.dirLightBeta),
+        Math.sin(this.dirLightAlpha),
+        Math.cos(this.dirLightAlpha) * Math.sin(this.dirLightBeta),
+      ];
     },
 
     init: function() {
