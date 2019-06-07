@@ -27,7 +27,7 @@
       Math.cos(dirLightAlpha) * Math.sin(dirLightBeta),
     ];
     this.lightColor = new Float32Array([1.0, 1.0, 1.0, 1.0]);
-    this.Shader = GameData.SHADER.GOUREAUD;
+    this.Shader = GameData.SHADER.PHONG;
     this.luke = {
       score: 0,
       position: {

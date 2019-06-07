@@ -63,7 +63,7 @@ var lightDirectionObj = new Array();
 var lightPositionObj = new Array();
 
 var textureInfluence = 0.0;
-var ambientLightInfluence = 1.0;
+var ambientLightInfluence = 1;
 var ambientLightColor = [1.0, 1.0, 1.0, 1.0];
 
 // texture loader callback
