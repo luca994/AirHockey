@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset='utf-8'>
+		<title>Luke vs Andrea - AirHockey</title>
+		<script type="text/javascript" src="utils.js"></script>
+		<script type="text/javascript" src="lib/box2d.js"></script>
+		<script type="text/javascript" src="gamedata.js"></script>
+		<script type="text/javascript" src="gamephysics.js"></script>
+		<script type="text/javascript" src="drawing.js"></script>
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+		<style media="screen">
+			.card {
+				color: black;
+			}
+			#gameControls {
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: 20;
+				width: 200px;
+			}
+			.btn {
+				margin-top: 5px;
+				width: 100%;
+			}
+			body {
+				position: absolute;
+				padding: 0;
+				margin: 0;
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+
+		<table>
+			<tr>
+				<td>
+					<canvas id="c" width="800" height="600"></canvas>
+				</td>
+			</tr>
+		</table>
+
+		<div class="accordion border-top-0 border-left-0 border-right border-bottom border border-primary" id="gameControls">
+			<div class="card">
+				<div class="card-header" id="headingOne" style="padding:3px;">
+					<h2 class="mb-0">
+						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<b>Game Controls</b>
+						</button>
+					</h2>
+				</div>
+
+				<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+					<div class="card-body">
+
+						<h5 class="card-title">
+							<button class="btn btn-success" style="text-align:left;" id="luke_btn">
+								Luke
+								<span class="badge badge-light float-right" style="top:1px;" id="luke_points">0</span>
+							</button>
+							<button class="btn btn-warning" style="text-align:left;" id="andrea_btn">
+								Andrea
+								<span class="badge badge-light float-right" style="top:1px;" id="andrea_points">0</span>
+							</button>
+						</h5>
+
+						<hr>
+						<a class="btn btn-outline-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="true" aria-controls="multiCollapseExample1">Camera Settings</a>
+						<a class="btn btn-outline-primary" style="margin-bottom:5px;" data-toggle="collapse" href="#multiCollapseExample2" role="button" aria-expanded="true" aria-controls="multiCollapseExample2">Light Settings</a>
+
+						<div class="collapse" id="multiCollapseExample1" style="margin-bottom:5px;">
+							<div class="card card-body">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting1" value="0" checked="checked">
+									<label class="form-check-label" for="cameraSetting1">
+										Top
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting2" value="1">
+									<label class="form-check-label" for="cameraSetting2">
+										On Luke
+									</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting3" value="2">
+									<label class="form-check-label" for="cameraSetting3">
+										On Andrea
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="collapse" id="multiCollapseExample2">
+							<div class="card card-body">
+								<label for="customRange1">Position</label>
+								<input type="range" class="custom-range" min="0" max="5" step="0.5" id="lightPosition">
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+		<script>
+			function init() {
+				canvas = document.getElementById("c");
+				try {
+					//get Canvas without aplpha channel
+					gl = canvas.getContext("webgl2", {alpha: false});
+				} catch (e) {
+					console.log(e);
+				}
+				if (gl) {
+					//Setting the size for the canvas equal to half the browser window and other useful parameters
+					var w = canvas.clientWidth;
+					var h = canvas.clientHeight;
+					gl.clearColor(1.0, 1.0, 1.0, 1.0);
+					gl.viewport(0.0, 0.0, w, h);
+					gl.enable(gl.DEPTH_TEST);
+					perspectiveMatrix = utils.MakePerspective(45, w / h, 0.1, 100.0);
+
+					//Open the json file containing the 3D model to load, parse it to retreive objects' data and creates the VBO and IBO from them The vertex format is (x,y,z,nx,ny,nz,u,v)
+					loadModel("table.json");
+					loadModel("paddle.json");
+					loadModel("paddle.json");
+					loadModel("puck.json");
+
+					gameData.init();
+					simulation = new GamePhysics(gameData);
+					gameData.setState(GameData.STATES.PLAYING);
+
+					loadShaders();
+
+					//Setting up the interaction using keys
+					initInteraction();
+
+					//Rendering cycle
+					drawScene();
+
+				} else {
+					alert("Error: Your browser does not appear to support WebGL.");
+				}
+			}
+			window.onload = init;
+
+
+			////////////////////////////////////////////////////////////////////////////////////////
+			/////////////////////////// Game Controls //////////////////////////////////////////////
+
+			function fadeIn(element) {
+				var op = 0.1; // initial opacity
+				element.style.display = 'block';
+				var timer = setInterval(function () {
+					if (op >= 1) {
+						clearInterval(timer);
+					}
+					element.style.opacity = op;
+					element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+					op += op * 0.1;
+				}, 25);
+			}
+
+			$(document).ready(function () {
+
+				$('input:radio[name=cameraSetting]').change(function () {
+					console.log($(this).val());
+					gameData.camera = Number.parseInt($(this).val());
+				});
+
+				var slider = document.getElementById("lightPosition");
+				console.log("init light: " + slider.value);
+				slider.oninput = function () {
+					console.log("changed light: " + this.value);
+				}
+
+				window.newGoal = function (who) {
+					console.log(gameData.playerA.score)
+		      console.log(gameData.playerB.score)
+					if (who == 1) {
+						fadeIn(document.getElementById("luke_btn"));
+						document.getElementById("luke_points").innerHTML = gameData.playerA.score;
+					} else {
+						fadeIn(document.getElementById("andrea_btn"));
+						document.getElementById("andrea_points").innerHTML = gameData.playerB.score;
+					}
+				}
+			});
+		</script>
+	</body>
+</html>
