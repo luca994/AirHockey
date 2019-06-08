@@ -303,6 +303,7 @@ function doResize() {
 }
 
 
+//paddle controls
 function initInteraction() {
   var keyFunction = function(e) {
     var map = {};

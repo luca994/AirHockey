@@ -68,10 +68,10 @@
     CUSTOM: 3,
   }
   GameData.LIGHTTYPES = {
+    SPOT: 0,
     DIRECTIONAL: 1,
     POINT: 2,
     POINT_DECAY: 3,
-    SPOT: 4,
   }
   GameData.SHADER = {
     GOUREAUD: 0,
