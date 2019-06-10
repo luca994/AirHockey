@@ -15,7 +15,7 @@
       depth: 0.045
     };
     this.state = GameData.STATES.LOADING;
-    this.camera = GameData.CAMERAS.CUSTOM;
+    this.camera = GameData.CAMERAS.ANDREA;
     this.lightType = GameData.LIGHTTYPES.SPOT;
     this.lightPosition = [0.0, 0.5, 0.0];
     this.dirLightAlpha = -utils.degToRad(90);

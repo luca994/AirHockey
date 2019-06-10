@@ -46,9 +46,9 @@ var diffuseTextureObj = new Array(); //Texture material
 var nTexture = new Array(); //Number of textures per object
 
 //Parameters for Camera
-var cx = 0.0;
-var cy = 5.0;
-var cz = 0.0;
+var cx = 0.1;
+var cy = 3.5 + gameData.tableSize.height;
+var cz = gameData.tableSize.depth;
 var elevation = -90.0;
 var angle = 0.0;
 var keys = [];
@@ -58,6 +58,9 @@ var vz = 0.0;
 var rvx=0;
 var rvy=0;
 var rvz=0;
+var cvx=0;
+var cvy=0;
+var cvz=0;
 
 var stepCam = 0.0;
 var stepCamEl = 0.0;
@@ -348,6 +351,22 @@ var keyFunctionDown =function(e) {
       case 83:
 		vz = vz + 1.0;
 		break;
+      /* key: "j" */
+      case 74:
+        cvx = cvx - 1.0;
+        break;
+      /* key: "l" */
+      case 76:
+        cvx = cvx + 1.0;
+        break;
+      /* key: "i" */
+      case 73:
+        cvy = cvy - 1.0;
+        break;
+      /* key: "k" */
+      case 75:
+        cvy = cvy + 1.0;
+        break;
 	}
   }
 }
@@ -388,123 +407,27 @@ var keyFunctionUp =function(e) {
       case 83:
 		vz = vz - 1.0;
 		break;
+      /* key: "j" */
+      case 74:
+        cvx = cvx + 1.0;
+        break;
+      /* key: "l" */
+      case 76:
+        cvx = cvx - 1.0;
+        break;
+      /* key: "i" */
+      case 73:
+        cvy = cvy + 1.0;
+        break;
+      /* key: "k" */
+      case 75:
+        cvy = cvy - 1.0;
+        break;
 	}
   }
 }
 window.addEventListener("keyup", keyFunctionUp, false);
 window.addEventListener("keydown", keyFunctionDown, false);
-
-
-// //paddle controls
-// function initInteraction() {
-//   var keyFunctionDown = function(e) {
-//     var map = {};
-//     e = e || event; // to deal with IE
-//     map[e.keyCode] = e.type == 'keydown';
-//     const step = 10;
-//
-//     if (map[37]) { // Left arrow
-//       gameData.andrea.position.x += gameData.tableSize.width / step
-//       gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
-//     }
-//     if (map[39]) { // Right arrow
-//       gameData.andrea.position.x -= gameData.tableSize.width / step
-//       gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
-//     }
-//     if (map[40]) { // Up arrow
-//       gameData.andrea.position.z -= gameData.tableSize.width / step
-//       gameData.andrea.position.z = Math.max(gameData.andrea.position.z, -gameData.tableSize.depth / 2 + gameData.andrea.radius + gameData.goalSize.depth)
-//     }
-//     if (map[38]) { // Down arrow
-//
-//       gameData.andrea.position.z += gameData.tableSize.depth / step
-//       gameData.andrea.position.z = Math.min(gameData.andrea.position.z, 0 - gameData.andrea.radius)
-//     }
-//
-//     if (map[65]) { // a
-//       gameData.luke.position.x -= gameData.tableSize.width / step
-//       gameData.luke.position.x = Math.max(-gameData.tableSize.width / 2 + gameData.luke.radius, gameData.luke.position.x)
-//     }
-//     if (map[68]) { // d
-//       gameData.luke.position.x += gameData.tableSize.width / step
-//       gameData.luke.position.x = Math.min(gameData.luke.position.x, gameData.tableSize.width / 2 - gameData.luke.radius)
-//     }
-//     if (map[87]) { // w
-//       gameData.luke.position.z -= gameData.tableSize.depth / step
-//       gameData.luke.position.z = Math.max(0.0 + gameData.luke.radius, gameData.luke.position.z)
-//     }
-//     if (map[83]) { // s
-//       gameData.luke.position.z += gameData.tableSize.depth / step
-//       gameData.luke.position.z = Math.min(gameData.luke.position.z, gameData.tableSize.depth / 2 - gameData.luke.radius - gameData.goalSize.depth)
-//     }
-//     if (map[72]) { // h
-//       vx += 1;
-//     }
-//     if (map[187]) { // j
-//       vy += 1;
-//     }
-//     if (map[189]) { // j
-//       vy -= 1;
-//     }
-//     //console.log(" ("+cx + "/" + cy + "/" + cz + ") - "+ elevation + "." + angle);
-//   }
-//
-//   var keyFunctionUp = function(e) {
-//     var map = {};
-//     e = e || event; // to deal with IE
-//     map[e.keyCode] = e.type == 'keydown';
-//     const step = 10;
-//
-//     if (map[37]) { // Left arrow
-//       gameData.andrea.position.x += gameData.tableSize.width / step
-//       gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
-//     }
-//     if (map[39]) { // Right arrow
-//       gameData.andrea.position.x -= gameData.tableSize.width / step
-//       gameData.andrea.position.x = Math.min(Math.max(-gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.andrea.position.x), gameData.tableSize.width / 2 - gameData.andrea.radius)
-//     }
-//     if (map[40]) { // Up arrow
-//       gameData.andrea.position.z -= gameData.tableSize.width / step
-//       gameData.andrea.position.z = Math.max(gameData.andrea.position.z, -gameData.tableSize.depth / 2 + gameData.andrea.radius + gameData.goalSize.depth)
-//     }
-//     if (map[38]) { // Down arrow
-//
-//       gameData.andrea.position.z += gameData.tableSize.depth / step
-//       gameData.andrea.position.z = Math.min(gameData.andrea.position.z, 0 - gameData.andrea.radius)
-//     }
-//
-//     if (map[65]) { // a
-//       gameData.luke.position.x -= gameData.tableSize.width / step
-//       gameData.luke.position.x = Math.max(-gameData.tableSize.width / 2 + gameData.luke.radius, gameData.luke.position.x)
-//     }
-//     if (map[68]) { // d
-//       gameData.luke.position.x += gameData.tableSize.width / step
-//       gameData.luke.position.x = Math.min(gameData.luke.position.x, gameData.tableSize.width / 2 - gameData.luke.radius)
-//     }
-//     if (map[87]) { // w
-//       gameData.luke.position.z -= gameData.tableSize.depth / step
-//       gameData.luke.position.z = Math.max(0.0 + gameData.luke.radius, gameData.luke.position.z)
-//     }
-//     if (map[83]) { // s
-//       gameData.luke.position.z += gameData.tableSize.depth / step
-//       gameData.luke.position.z = Math.min(gameData.luke.position.z, gameData.tableSize.depth / 2 - gameData.luke.radius - gameData.goalSize.depth)
-//     }
-//     if (map[72]) { // h
-//       vx -= 1;
-//     }
-//     if (map[187]) { // j
-//       vy -= 1;
-//     }
-//     if (map[189]) { // j
-//       vy += 1;
-//     }
-//     //console.log(" ("+cx + "/" + cy + "/" + cz + ") - "+ elevation + "." + angle);
-//   }
-//
-//
-//   window.addEventListener("keyup", keyFunctionUp, false);
-//   window.addEventListener("keydown", keyFunctionDown, false);
-// }
 
 
 function computeMatrices() {
@@ -531,18 +454,21 @@ function computeMatrices() {
     angle = -180.0;
     viewMatrix = utils.MakeView(cx, cy, cz, elevation, angle);
   } else if (gameData.camera == GameData.CAMERAS.CUSTOM) {
-    var slices = 30;
-    cx = (gameData.tableSize.depth)*Math.sin(2*Math.PI / slices * stepCam);
-    cy = 2.5 + gameData.tableSize.height + stepCamEl;
-    cz = (gameData.tableSize.depth)*Math.cos(2*Math.PI / slices * stepCam);
-    elevation = -45.0;
-    angle = 0.0;
-    viewMatrix=utils.MakeLookAt([cx,cy,cz],[0.0,0.0,0.0],[0.0,1.0,0.0])
+     var slices = 30;
+     cx = (gameData.tableSize.depth)*Math.sin(2*Math.PI / slices * stepCam);
+     cy = 2.5 + gameData.tableSize.height + stepCamEl;
+     cz = (gameData.tableSize.depth)*Math.cos(2*Math.PI / slices * stepCam);
+     viewMatrix=utils.MakeLookAt([cx,cy,cz],[0.0,gameData.tableSize.height,0.0],[0.0,1.0,0.0]);
+     stepCam += cvx/10;
+     stepCamEl += cvy/10;
+    // dvecmat = utils.transposeMatrix(viewMatrix); dvecmat[12] = dvecmat[13] = dvecmat[14] = 0.0;
+    // delta = utils.multiplyMatrixVector(dvecmat, [cvx, cvy, cvz, 0.0]);
+    // cx += delta[0] / 10;
+    // cy += delta[1] / 10;
+    // cz += delta[2] / 10;
   }
 
   var eyeTemp = [cx, cy, cz];
-
-
 
   /* TABLE */
   objectWorldMatrix[0] = utils.MakeWorld(0.0, gameData.tableSize.height, 0.0, 90.0, 0.0, 0.0, 0.196)
@@ -557,13 +483,12 @@ function computeMatrices() {
     gameData.luke.position.z,
     0.0, 0.0, 0.0, 0.077)
     dvecmat = objectWorldMatrix[4];
-    objectWorldMatrix[4] = utils.multiplyMatrices(dvecmat, utils.MakeScaleMatrix(1.0));
     delta = utils.multiplyMatrixVector(dvecmat, [vx, 0, vz, 0.0]);
     gameData.luke.position.x += delta[0];
     gameData.luke.position.z += delta[2];
     // Limit the movement to remain on the table
     gameData.luke.position.x = utils.clamp(gameData.luke.position.x,-gameData.tableSize.width/2 + gameData.luke.radius,gameData.tableSize.width / 2 - gameData.luke.radius);
-    gameData.luke.position.z = utils.clamp(gameData.luke.position.z,0 + gameData.luke.radius,gameData.tableSize.depth / 2 - gameData.luke.radius - gameData.goalSize.depth);
+    gameData.luke.position.z = utils.clamp(gameData.luke.position.z,0 + gameData.luke.radius,gameData.tableSize.depth / 2 - gameData.luke.radius - gameData.goalSize.depth-0.085);
 
 
   /* PADDLE PLAYER 2 */
@@ -572,13 +497,12 @@ function computeMatrices() {
     gameData.andrea.position.z,
     0.0, 0.0, 0.0, 0.077)
     dvecmat = objectWorldMatrix[5];
-    objectWorldMatrix[5] = utils.multiplyMatrices(dvecmat, utils.MakeScaleMatrix(1.0));
     delta = utils.multiplyMatrixVector(dvecmat, [rvx, 0, rvz, 0.0]);
     gameData.andrea.position.x += delta[0];
     gameData.andrea.position.z += delta[2];
     // Limit the movement to remain on the table
     gameData.andrea.position.x = utils.clamp(gameData.andrea.position.x,-gameData.tableSize.width/2 + gameData.andrea.radius,gameData.tableSize.width / 2 - gameData.andrea.radius);
-    gameData.andrea.position.z = utils.clamp(gameData.andrea.position.z,-gameData.tableSize.depth / 2 + gameData.andrea.radius + gameData.goalSize.depth,0-gameData.andrea.radius);
+    gameData.andrea.position.z = utils.clamp(gameData.andrea.position.z,-gameData.tableSize.depth / 2 + gameData.andrea.radius + gameData.goalSize.depth+0.085,0-gameData.andrea.radius);
 
 
 
