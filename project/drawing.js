@@ -52,7 +52,8 @@ var cz = 0.0;
 var elevation = -90.0;
 var angle = 0.0;
 
-var delta = 2.0;
+var stepCam = 0.0;
+var stepCamEl = 0.0;
 
 // Eye parameters;
 // We need now 4 eye vector, one for each cube
@@ -345,6 +346,15 @@ function initInteraction() {
       gameData.luke.position.z += gameData.tableSize.depth / step
       gameData.luke.position.z = Math.min(gameData.luke.position.z, gameData.tableSize.depth / 2 - gameData.luke.radius - gameData.goalSize.depth)
     }
+    if (map[72]) { // h
+      stepCam += 1;
+    }
+    if (map[187]) { // j
+      stepCamEl += 1;
+    }
+    if (map[189]) { // j
+      stepCamEl -= 1;
+    }
     //console.log(" ("+cx + "/" + cy + "/" + cz + ") - "+ elevation + "." + angle);
   }
 
@@ -361,27 +371,30 @@ function computeMatrices() {
     cz = gameData.tableSize.depth;
     elevation = -45.0;
     angle = 0.0;
+    viewMatrix = utils.MakeView(cx, cy, cz, elevation, angle);
   } else if (gameData.camera == GameData.CAMERAS.TOP) {
     cx = 0.0;
     cy = 5.0;
     cz = 0.0;
     elevation = -90.0;
     angle = 0.0;
+    viewMatrix = utils.MakeView(cx, cy, cz, elevation, angle);
   } else if (gameData.camera == GameData.CAMERAS.LUKE) {
     cx = 0;
     cy = 2.5 + gameData.tableSize.height;
     cz = gameData.tableSize.depth - 5.7;
     elevation = -45.0;
     angle = -180.0;
+    viewMatrix = utils.MakeView(cx, cy, cz, elevation, angle);
   } else if (gameData.camera == GameData.CAMERAS.CUSTOM) {
-    cx = 0;
-    cy = 2.5 + gameData.tableSize.height;
-    cz = gameData.tableSize.depth;
+    var slices = 50
+    cx = (gameData.tableSize.depth)*Math.sin(2*Math.PI / slices * stepCam);
+    cy = 2.5 + gameData.tableSize.height + stepCamEl;
+    cz = (gameData.tableSize.depth)*Math.cos(2*Math.PI / slices * stepCam);
     elevation = -45.0;
     angle = 0.0;
+    viewMatrix=utils.MakeLookAt([cx,cy,cz],[0.0,0.0,0.0],[0.0,1.0,0.0])
   }
-
-  viewMatrix = utils.MakeView(cx, cy, cz, elevation, angle);
 
   var eyeTemp = [cx, cy, cz];
 
