@@ -58,8 +58,6 @@ var vz = 0.0;
 var rvx=0;
 var rvy=0;
 var rvz=0;
-var cvx=0;
-var cvy=0;
 var cvz=0;
 
 var stepCam = 0.0;
@@ -353,19 +351,19 @@ var keyFunctionDown =function(e) {
 		break;
       /* key: "j" */
       case 74:
-        cvx = cvx - 1.0;
+        this.gameData.customCamera.cvx = this.gameData.customCamera.cvx - 1.0;
         break;
       /* key: "l" */
       case 76:
-        cvx = cvx + 1.0;
+        this.gameData.customCamera.cvx = this.gameData.customCamera.cvx + 1.0;
         break;
       /* key: "i" */
       case 73:
-        cvy = cvy - 1.0;
+        this.gameData.customCamera.cvy = this.gameData.customCamera.cvy - 1.0;
         break;
       /* key: "k" */
       case 75:
-        cvy = cvy + 1.0;
+        this.gameData.customCamera.cvy = this.gameData.customCamera.cvy + 1.0;
         break;
 	}
   }
@@ -409,19 +407,19 @@ var keyFunctionUp =function(e) {
 		break;
       /* key: "j" */
       case 74:
-        cvx = cvx + 1.0;
+        this.gameData.customCamera.cvx = this.gameData.customCamera.cvx + 1.0;
         break;
       /* key: "l" */
       case 76:
-        cvx = cvx - 1.0;
+        this.gameData.customCamera.cvx = this.gameData.customCamera.cvx - 1.0;
         break;
       /* key: "i" */
       case 73:
-        cvy = cvy + 1.0;
+        this.gameData.customCamera.cvy = this.gameData.customCamera.cvy + 1.0;
         break;
       /* key: "k" */
       case 75:
-        cvy = cvy - 1.0;
+        this.gameData.customCamera.cvy = this.gameData.customCamera.cvy - 1.0;
         break;
 	}
   }
@@ -459,13 +457,8 @@ function computeMatrices() {
      cy = 2.5 + gameData.tableSize.height + stepCamEl;
      cz = (gameData.tableSize.depth)*Math.cos(2*Math.PI / slices * stepCam);
      viewMatrix=utils.MakeLookAt([cx,cy,cz],[0.0,gameData.tableSize.height,0.0],[0.0,1.0,0.0]);
-     stepCam += cvx/10;
-     stepCamEl += cvy/10;
-    // dvecmat = utils.transposeMatrix(viewMatrix); dvecmat[12] = dvecmat[13] = dvecmat[14] = 0.0;
-    // delta = utils.multiplyMatrixVector(dvecmat, [cvx, cvy, cvz, 0.0]);
-    // cx += delta[0] / 10;
-    // cy += delta[1] / 10;
-    // cz += delta[2] / 10;
+     stepCam += this.gameData.customCamera.cvx/10;
+     stepCamEl += this.gameData.customCamera.cvy/10;
   }
 
   var eyeTemp = [cx, cy, cz];

@@ -101,6 +101,10 @@
 										Custom
 									</label>
 								</div>
+								<div id="customCameraControls" style="display:none; margin-top:10px; text-size:12px;">
+									Use <b>J</b> or <b>L</b> for X direction <br/>
+									Use <b>I</b> or <b>K</b> for Y direction
+								</div>
 							</div>
 						</div>
 
@@ -194,10 +198,7 @@
 
 						loadShaders();
 
-						//Setting up the interaction using keys
-						// initInteraction();
-
-						//Rendering cycle
+						//Setting up the interaction using keys initInteraction(); Rendering cycle
 						drawScene();
 
 					} else {
@@ -206,7 +207,7 @@
 				}
 				window.onload = init;
 
-				//////////////////////////////////////////////////////////////////////////////////////// /////////// Game Controls //////////////////////////////
+				//////////////////////////////////////////////////////////////////////////////////////// /////// Game Controls //////////////////////////
 
 				function fadeIn(element) {
 					var op = 0.1; // initial opacity
@@ -233,7 +234,13 @@
 					$('input:radio[name=cameraSetting]').change(function () {
 						console.log($(this).val());
 						gameData.camera = Number.parseInt($(this).val());
+						if (gameData.camera == GameData.CAMERAS.CUSTOM) {
+							$('#customCameraControls').show('slow')
+						}else{
+							$('#customCameraControls').hide('slow')
+						}
 					});
+
 
 					document.getElementById("lightPosition").oninput = function () {
 						console.log("changed light pos: " + this.value);

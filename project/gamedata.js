@@ -17,6 +17,10 @@
     this.state = GameData.STATES.LOADING;
     this.camera = GameData.CAMERAS.ANDREA;
     this.lightType = GameData.LIGHTTYPES.SPOT;
+    this.customCamera = {
+      cvx: 0,
+      cvy: 0
+    }
     this.lightPosition = [0.0, 0.5, 0.0];
     this.dirLightAlpha = -utils.degToRad(90);
     this.dirLightBeta = 0;
