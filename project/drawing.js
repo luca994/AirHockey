@@ -72,7 +72,7 @@ var lightDirectionObj = new Array();
 var lightPositionObj = new Array();
 
 var textureInfluence = 0.0;
-var ambientLightInfluence = 1;
+var ambientLightInfluence = 1.0;
 var ambientLightColor = [1.0, 1.0, 1.0, 1.0];
 
 // texture loader callback
@@ -319,19 +319,19 @@ var keyFunctionDown =function(e) {
 	switch(e.keyCode) {
       /* key: "leftarrow" */
 	  case 37:
-		rvx = rvx - 1.0;
+		rvx = rvx + 1.0;
 		break;
       /* key: "rightarrow" */
       case 39:
-		rvx = rvx + 1.0;
+		rvx = rvx - 1.0;
 		break;
       /* key: "uparrow" */
 	  case 38:
-		rvz = rvz - 1.0;
+		rvz = rvz + 1.0;
 		break;
       /* key: "downarrow" */
 	  case 40:
-		rvz = rvz + 1.0;
+		rvz = rvz - 1.0;
 		break;
       /* key: "a" */
 	  case 65:
@@ -375,19 +375,19 @@ var keyFunctionUp =function(e) {
 	switch(e.keyCode) {
       /* key: "leftarrow" */
       case 37:
-		rvx = rvx + 1.0;
+		rvx = rvx - 1.0;
 		break;
       /* key: "rightarrow" */
 	  case 39:
-		rvx = rvx - 1.0;
+		rvx = rvx + 1.0;
 		break;
       /* key: "uparrow" */
       case 38:
-		rvz = rvz + 1.0;
+		rvz = rvz - 1.0;
 		break;
       /* key: "downarrow" */
       case 40:
-		rvz = rvz - 1.0;
+		rvz = rvz + 1.0;
 		break;
       /* key: "a" */
       case 65:
@@ -463,36 +463,39 @@ function computeMatrices() {
 
   var eyeTemp = [cx, cy, cz];
 
-  /* TABLE */
+  /* TEXTURE PLANE */
   objectWorldMatrix[0] = utils.MakeWorld(0.0, gameData.tableSize.height, 0.0, 90.0, 0.0, 0.0, 0.196)
+
+  /* TABLE */
   objectWorldMatrix[1] = utils.MakeWorld(0.0, gameData.tableSize.height, 0.0, 90.0, 0.0, 0.0, 0.196)
   objectWorldMatrix[2] = utils.MakeWorld(0.0, gameData.tableSize.height, 0.0, 90.0, 0.0, 0.0, 0.196)
   objectWorldMatrix[3] = utils.MakeWorld(0.0, gameData.tableSize.height, 0.0, 90.0, 0.0, 0.0, 0.196)
+  objectWorldMatrix[4] = utils.MakeWorld(0.0, gameData.tableSize.height, 0.0, 90.0, 0.0, 0.0, 0.196)
 
 
   /* PADDLE PLAYER 1 */
-  objectWorldMatrix[4] = utils.MakeWorld(gameData.luke.position.x,
+  objectWorldMatrix[5] = utils.MakeWorld(gameData.luke.position.x,
     gameData.luke.position.y,
     gameData.luke.position.z,
     0.0, 0.0, 0.0, 0.077)
-    dvecmat = objectWorldMatrix[4];
+    dvecmat = objectWorldMatrix[5];
     delta = utils.multiplyMatrixVector(dvecmat, [vx, 0, vz, 0.0]);
-    gameData.luke.position.x += delta[0];
-    gameData.luke.position.z += delta[2];
+    gameData.luke.position.x += delta[0]*0.5;
+    gameData.luke.position.z += delta[2]*0.5;
     // Limit the movement to remain on the table
     gameData.luke.position.x = utils.clamp(gameData.luke.position.x,-gameData.tableSize.width/2 + gameData.luke.radius,gameData.tableSize.width / 2 - gameData.luke.radius);
     gameData.luke.position.z = utils.clamp(gameData.luke.position.z,0 + gameData.luke.radius,gameData.tableSize.depth / 2 - gameData.luke.radius - gameData.goalSize.depth-0.085);
 
 
   /* PADDLE PLAYER 2 */
-  objectWorldMatrix[5] = utils.MakeWorld(gameData.andrea.position.x,
+  objectWorldMatrix[6] = utils.MakeWorld(gameData.andrea.position.x,
     gameData.andrea.position.y,
     gameData.andrea.position.z,
     0.0, 0.0, 0.0, 0.077)
-    dvecmat = objectWorldMatrix[5];
+    dvecmat = objectWorldMatrix[6];
     delta = utils.multiplyMatrixVector(dvecmat, [rvx, 0, rvz, 0.0]);
-    gameData.andrea.position.x += delta[0];
-    gameData.andrea.position.z += delta[2];
+    gameData.andrea.position.x += delta[0]*0.5;
+    gameData.andrea.position.z += delta[2]*0.5;
     // Limit the movement to remain on the table
     gameData.andrea.position.x = utils.clamp(gameData.andrea.position.x,-gameData.tableSize.width/2 + gameData.andrea.radius,gameData.tableSize.width / 2 - gameData.andrea.radius);
     gameData.andrea.position.z = utils.clamp(gameData.andrea.position.z,-gameData.tableSize.depth / 2 + gameData.andrea.radius + gameData.goalSize.depth+0.085,0-gameData.andrea.radius);
@@ -500,7 +503,7 @@ function computeMatrices() {
 
 
   /* PUCK */
-  objectWorldMatrix[6] = utils.MakeWorld(gameData.puck.position.x,
+  objectWorldMatrix[7] = utils.MakeWorld(gameData.puck.position.x,
     gameData.puck.position.y,
     gameData.puck.position.z,
     0.0, 0.0, 0.0, 0.039)
@@ -533,6 +536,7 @@ function drawScene() {
   for (i = 0; i < sceneObjects; i++) {
     gl.uniformMatrix4fv(matrixPositionHandle[gameData.Shader], gl.FALSE, utils.transposeMatrix(projectionMatrix[i]));
 
+    textureInfluence = i==0 ? 1.0 : 0.0
     gl.uniform1f(textureInfluenceHandle[gameData.Shader], textureInfluence);
     gl.uniform1f(ambientLightInfluenceHandle[gameData.Shader], ambientLightInfluence);
 

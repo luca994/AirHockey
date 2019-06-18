@@ -1,11 +1,11 @@
 attribute vec3 inPosition; 
-attribute vec3 inNormal; 
+attribute vec3 inNormal;
 attribute vec2 inUVs;
 attribute vec2 inUV2s;
 
-uniform mat4 wvpMatrix; 
+uniform mat4 wvpMatrix;
 
-uniform vec4 mSpecColor;            
+uniform vec4 mSpecColor;
 uniform float mSpecPower;
 
 uniform vec3 lightDirection;
@@ -26,15 +26,15 @@ varying vec4 goureaudSpecular;
 varying vec4 goureaudDiffuseAndAmbient;
 
 vec4 lightModel(int lt, vec3 pos) {
-	
+
 	//The normalize light direction
     vec3 nLightDir;
-	
+
 	//Float to store light dimension and cone length
 	float lDim, lCone;
 
 	lDim = 1.0;
-	
+
 	if(lt == 1) { 			//Directional light
 		nLightDir = - normalize(lightDirection);
 	} else if(lt == 2) {	//Point light
@@ -58,20 +58,20 @@ vec4 lightModel(int lt, vec3 pos) {
 }
 
 
-void main() { 
+void main() {
 
 	fsUVs = inUVs;
 	fsUV2s = inUV2s;
 	gl_Position = wvpMatrix * vec4(inPosition, 1.0);
-	
+
 	vec3 nEyeDirection = normalize(eyePosition - inPosition);
 	vec3 nNormal = normalize(inNormal);
-	
+
 
 	vec4 lm = lightModel(lightType, inPosition);
 	vec3 nlightDirection = lm.rgb;
 	float lightDimension = lm.a;
-	
+
 	//Computing the ambient light contribution (Without the texture contribution)
 	vec4 ambLight = ambientLightColor * ambientLightInfluence;
 	if(lightType == 5){
@@ -79,14 +79,14 @@ void main() {
 		goureaudDiffuseAndAmbient = vec4(1.0, 1.0, 1.0, 1.0);
 	}else {
 		//Computing the diffuse component of light (Without the texture contribution)
-		vec4 diffuse = lightColor * clamp(dot(nlightDirection, nNormal), 0.0, 1.0) * lightDimension;	
-		
+		vec4 diffuse = lightColor * clamp(dot(nlightDirection, nNormal), 0.0, 1.0) * lightDimension;
+
 		//Reflection vector for Phong model
-		vec3 reflection = -reflect(nlightDirection, nNormal);	
+		vec3 reflection = -reflect(nlightDirection, nNormal);
 		vec4 specular = mSpecColor * lightColor * pow(clamp(dot(reflection, nEyeDirection),0.0, 1.0), mSpecPower) * lightDimension;
-			
+
 		goureaudSpecular = specular;
 		goureaudDiffuseAndAmbient = diffuse + ambLight;
 	}
-	
+
 }

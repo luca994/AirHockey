@@ -72,7 +72,7 @@
     CUSTOM: 3,
   }
   GameData.LIGHTTYPES = {
-    SPOT: 0,
+    SPOT: 4,
     DIRECTIONAL: 1,
     POINT: 2,
     POINT_DECAY: 3,
