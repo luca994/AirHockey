@@ -46,19 +46,19 @@ var diffuseTextureObj = new Array(); //Texture material
 var nTexture = new Array(); //Number of textures per object
 
 //Parameters for Camera
-var cx = 0.1;
-var cy = 3.5 + gameData.tableSize.height;
-var cz = gameData.tableSize.depth;
+var cx = 0;
+var cy = 0;
+var cz = 0;
 var elevation = -90.0;
 var angle = 0.0;
 var keys = [];
 var vx = 0.0;
 var vy = 0.0;
 var vz = 0.0;
-var rvx=0;
-var rvy=0;
-var rvz=0;
-var cvz=0;
+var rvx = 0;
+var rvy = 0;
+var rvz = 0;
+var cvz = 0;
 
 var stepCam = 0.0;
 var stepCamEl = 0.0;
@@ -301,7 +301,7 @@ function doResize() {
   var canvas = document.getElementById("c");
   if ((window.innerWidth > 40) && (window.innerHeight > 240)) {
     canvas.width = window.innerWidth - 16;
-    canvas.height = window.innerHeight - 200;
+    canvas.height = window.innerHeight - 16;
     var w = canvas.clientWidth;
     var h = canvas.clientHeight;
 
@@ -313,115 +313,115 @@ function doResize() {
 }
 
 
-var keyFunctionDown =function(e) {
-  if(!keys[e.keyCode]) {
-  	keys[e.keyCode] = true;
-	switch(e.keyCode) {
+var keyFunctionDown = function(e) {
+  if (!keys[e.keyCode]) {
+    keys[e.keyCode] = true;
+    switch (e.keyCode) {
       /* key: "leftarrow" */
-	  case 37:
-		rvx = rvx + 1.0;
-		break;
-      /* key: "rightarrow" */
+      case 37:
+        rvx = rvx + 1.0;
+        break;
+        /* key: "rightarrow" */
       case 39:
-		rvx = rvx - 1.0;
-		break;
-      /* key: "uparrow" */
-	  case 38:
-		rvz = rvz + 1.0;
-		break;
-      /* key: "downarrow" */
-	  case 40:
-		rvz = rvz - 1.0;
-		break;
-      /* key: "a" */
-	  case 65:
-		vx = vx - 1.0;
-		break;
-      /* key: "d" */
+        rvx = rvx - 1.0;
+        break;
+        /* key: "uparrow" */
+      case 38:
+        rvz = rvz + 1.0;
+        break;
+        /* key: "downarrow" */
+      case 40:
+        rvz = rvz - 1.0;
+        break;
+        /* key: "a" */
+      case 65:
+        vx = vx - 1.0;
+        break;
+        /* key: "d" */
       case 68:
-		vx = vx + 1.0;
-		break;
-      /* key: "w" */
+        vx = vx + 1.0;
+        break;
+        /* key: "w" */
       case 87:
-		vz = vz - 1.0;
-		break;
-      /* key: "s" */
+        vz = vz - 1.0;
+        break;
+        /* key: "s" */
       case 83:
-		vz = vz + 1.0;
-		break;
-      /* key: "j" */
+        vz = vz + 1.0;
+        break;
+        /* key: "j" */
       case 74:
         this.gameData.customCamera.cvx = this.gameData.customCamera.cvx - 1.0;
         break;
-      /* key: "l" */
+        /* key: "l" */
       case 76:
         this.gameData.customCamera.cvx = this.gameData.customCamera.cvx + 1.0;
         break;
-      /* key: "i" */
+        /* key: "i" */
       case 73:
         this.gameData.customCamera.cvy = this.gameData.customCamera.cvy - 1.0;
         break;
-      /* key: "k" */
+        /* key: "k" */
       case 75:
         this.gameData.customCamera.cvy = this.gameData.customCamera.cvy + 1.0;
         break;
-	}
+    }
   }
 }
 
-var keyFunctionUp =function(e) {
-  if(keys[e.keyCode]) {
-  	keys[e.keyCode] = false;
-	switch(e.keyCode) {
+var keyFunctionUp = function(e) {
+  if (keys[e.keyCode]) {
+    keys[e.keyCode] = false;
+    switch (e.keyCode) {
       /* key: "leftarrow" */
       case 37:
-		rvx = rvx - 1.0;
-		break;
-      /* key: "rightarrow" */
-	  case 39:
-		rvx = rvx + 1.0;
-		break;
-      /* key: "uparrow" */
+        rvx = rvx - 1.0;
+        break;
+        /* key: "rightarrow" */
+      case 39:
+        rvx = rvx + 1.0;
+        break;
+        /* key: "uparrow" */
       case 38:
-		rvz = rvz - 1.0;
-		break;
-      /* key: "downarrow" */
+        rvz = rvz - 1.0;
+        break;
+        /* key: "downarrow" */
       case 40:
-		rvz = rvz + 1.0;
-		break;
-      /* key: "a" */
+        rvz = rvz + 1.0;
+        break;
+        /* key: "a" */
       case 65:
-		vx = vx + 1.0;
-		break;
-      /* key: "d" */
+        vx = vx + 1.0;
+        break;
+        /* key: "d" */
       case 68:
-		vx = vx - 1.0;
-		break;
-      /* key: "w" */
+        vx = vx - 1.0;
+        break;
+        /* key: "w" */
       case 87:
-		vz = vz + 1.0;
-		break;
-      /* key: "s" */
+        vz = vz + 1.0;
+        break;
+        /* key: "s" */
       case 83:
-		vz = vz - 1.0;
-		break;
-      /* key: "j" */
+        vz = vz - 1.0;
+        break;
+        /* key: "j" */
       case 74:
         this.gameData.customCamera.cvx = this.gameData.customCamera.cvx + 1.0;
         break;
-      /* key: "l" */
+        /* key: "l" */
       case 76:
         this.gameData.customCamera.cvx = this.gameData.customCamera.cvx - 1.0;
         break;
-      /* key: "i" */
+        /* key: "i" */
       case 73:
         this.gameData.customCamera.cvy = this.gameData.customCamera.cvy + 1.0;
         break;
-      /* key: "k" */
+        /* key: "k" */
       case 75:
         this.gameData.customCamera.cvy = this.gameData.customCamera.cvy - 1.0;
         break;
-	}
+    }
   }
 }
 window.addEventListener("keyup", keyFunctionUp, false);
@@ -452,13 +452,13 @@ function computeMatrices() {
     angle = -180.0;
     viewMatrix = utils.MakeView(cx, cy, cz, elevation, angle);
   } else if (gameData.camera == GameData.CAMERAS.CUSTOM) {
-     var slices = 30;
-     cx = (gameData.tableSize.depth)*Math.sin(2*Math.PI / slices * stepCam);
-     cy = 2.5 + gameData.tableSize.height + stepCamEl;
-     cz = (gameData.tableSize.depth)*Math.cos(2*Math.PI / slices * stepCam);
-     viewMatrix=utils.MakeLookAt([cx,cy,cz],[0.0,gameData.tableSize.height,0.0],[0.0,1.0,0.0]);
-     stepCam += this.gameData.customCamera.cvx/10;
-     stepCamEl += this.gameData.customCamera.cvy/10;
+    var slices = 30;
+    cx = (gameData.tableSize.depth + 0.2) * Math.sin(2 * Math.PI / slices * stepCam);
+    cy = 2.5 + gameData.tableSize.height + stepCamEl;
+    cz = (gameData.tableSize.depth + 0.2) * Math.cos(2 * Math.PI / slices * stepCam);
+    viewMatrix = utils.MakeLookAt([cx, cy, cz], [0.0, gameData.tableSize.height, 0.0], [0.0, 1.0, 0.0]);
+    stepCam += this.gameData.customCamera.cvx / 10;
+    stepCamEl += this.gameData.customCamera.cvy / 10;
   }
 
   var eyeTemp = [cx, cy, cz];
@@ -478,13 +478,13 @@ function computeMatrices() {
     gameData.luke.position.y,
     gameData.luke.position.z,
     0.0, 0.0, 0.0, 0.077)
-    dvecmat = objectWorldMatrix[5];
-    delta = utils.multiplyMatrixVector(dvecmat, [vx, 0, vz, 0.0]);
-    gameData.luke.position.x += delta[0]*0.5;
-    gameData.luke.position.z += delta[2]*0.5;
-    // Limit the movement to remain on the table
-    gameData.luke.position.x = utils.clamp(gameData.luke.position.x,-gameData.tableSize.width/2 + gameData.luke.radius,gameData.tableSize.width / 2 - gameData.luke.radius);
-    gameData.luke.position.z = utils.clamp(gameData.luke.position.z,0 + gameData.luke.radius,gameData.tableSize.depth / 2 - gameData.luke.radius - gameData.goalSize.depth-0.085);
+  dvecmat = objectWorldMatrix[5];
+  delta = utils.multiplyMatrixVector(dvecmat, [vx, 0, vz, 0.0]);
+  gameData.luke.position.x += delta[0] * 0.5;
+  gameData.luke.position.z += delta[2] * 0.5;
+  // Limit the movement to remain on the table
+  gameData.luke.position.x = utils.clamp(gameData.luke.position.x, -gameData.tableSize.width / 2 + gameData.luke.radius, gameData.tableSize.width / 2 - gameData.luke.radius);
+  gameData.luke.position.z = utils.clamp(gameData.luke.position.z, 0 + gameData.luke.radius, gameData.tableSize.depth / 2 - gameData.luke.radius - gameData.goalSize.depth - 0.085);
 
 
   /* PADDLE PLAYER 2 */
@@ -492,13 +492,13 @@ function computeMatrices() {
     gameData.andrea.position.y,
     gameData.andrea.position.z,
     0.0, 0.0, 0.0, 0.077)
-    dvecmat = objectWorldMatrix[6];
-    delta = utils.multiplyMatrixVector(dvecmat, [rvx, 0, rvz, 0.0]);
-    gameData.andrea.position.x += delta[0]*0.5;
-    gameData.andrea.position.z += delta[2]*0.5;
-    // Limit the movement to remain on the table
-    gameData.andrea.position.x = utils.clamp(gameData.andrea.position.x,-gameData.tableSize.width/2 + gameData.andrea.radius,gameData.tableSize.width / 2 - gameData.andrea.radius);
-    gameData.andrea.position.z = utils.clamp(gameData.andrea.position.z,-gameData.tableSize.depth / 2 + gameData.andrea.radius + gameData.goalSize.depth+0.085,0-gameData.andrea.radius);
+  dvecmat = objectWorldMatrix[6];
+  delta = utils.multiplyMatrixVector(dvecmat, [rvx, 0, rvz, 0.0]);
+  gameData.andrea.position.x += delta[0] * 0.5;
+  gameData.andrea.position.z += delta[2] * 0.5;
+  // Limit the movement to remain on the table
+  gameData.andrea.position.x = utils.clamp(gameData.andrea.position.x, -gameData.tableSize.width / 2 + gameData.andrea.radius, gameData.tableSize.width / 2 - gameData.andrea.radius);
+  gameData.andrea.position.z = utils.clamp(gameData.andrea.position.z, -gameData.tableSize.depth / 2 + gameData.andrea.radius + gameData.goalSize.depth + 0.085, 0 - gameData.andrea.radius);
 
 
 
@@ -540,7 +540,7 @@ function drawScene() {
   for (i = 0; i < sceneObjects; i++) {
     gl.uniformMatrix4fv(matrixPositionHandle[gameData.Shader], gl.FALSE, utils.transposeMatrix(projectionMatrix[i]));
 
-    textureInfluence = i==0 || i==8 ? 1.0 : 0.0
+    textureInfluence = i == 0 || i == 8 ? 1.0 : 0.0
     gl.uniform1f(textureInfluenceHandle[gameData.Shader], textureInfluence);
     gl.uniform1f(ambientLightInfluenceHandle[gameData.Shader], ambientLightInfluence);
 
