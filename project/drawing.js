@@ -29,7 +29,7 @@ var lightTypeHandle = new Array(2);
 var eyePositionHandle = new Array(2);
 var materialSpecColorHandle = new Array(2);
 var materialSpecPowerHandle = new Array(2);
-var objectSpecularPower = 20.0;
+var objectSpecularPower = 10.0;
 
 var sceneObjects = 0; //total number of nodes
 var currentLoadedObj = 0;
@@ -265,7 +265,7 @@ function loadModel(modelName) {
       //*** mesh color
       diffuseColor[i] = loadedModel.materials[meshMatIndex].properties[diffuseColorPropertyIndex].value; // diffuse value
 
-      diffuseColor[i].push(1.0); // Alpha value added
+      //diffuseColor[i].push(1.0); // Alpha value added
 
       specularColor[i] = loadedModel.materials[meshMatIndex].properties[specularColorPropertyIndex].value;
       console.log("Specular: " + specularColor[i]);
@@ -506,7 +506,10 @@ function computeMatrices() {
   objectWorldMatrix[7] = utils.MakeWorld(gameData.puck.position.x,
     gameData.puck.position.y,
     gameData.puck.position.z,
-    0.0, 0.0, 0.0, 0.039)
+    0.0, 0.0, 0.0, 0.039);
+
+  /* FLOOR */
+  objectWorldMatrix[8] = utils.MakeWorld(0.0, 0.0, 0.0, 90.0, 0.0, 0.0, 1.0);
 
 
 
@@ -519,6 +522,7 @@ function computeMatrices() {
     lightPositionObj[i] = utils.multiplyMatrix3Vector3(utils.invertMatrix3(utils.sub3x3from4x4(objectWorldMatrix[i])), gameData.lightPosition);
 
     observerPositionObj[i] = utils.multiplyMatrix3Vector3(utils.invertMatrix3(utils.sub3x3from4x4(objectWorldMatrix[i])), eyeTemp);
+
   }
 
 }
@@ -536,7 +540,7 @@ function drawScene() {
   for (i = 0; i < sceneObjects; i++) {
     gl.uniformMatrix4fv(matrixPositionHandle[gameData.Shader], gl.FALSE, utils.transposeMatrix(projectionMatrix[i]));
 
-    textureInfluence = i==0 ? 1.0 : 0.0
+    textureInfluence = i==0 || i==8 ? 1.0 : 0.0
     gl.uniform1f(textureInfluenceHandle[gameData.Shader], textureInfluence);
     gl.uniform1f(ambientLightInfluenceHandle[gameData.Shader], ambientLightInfluence);
 
