@@ -154,20 +154,6 @@
 										Point Decay
 									</label>
 								</div>
-
-								<label for="customRange4" style="margin-top:15px;">Shader</label>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="shaderType" id="shaderType1" value="0">
-									<label class="form-check-label" for="shaderType1">
-										Goreaud
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="shaderType" id="shaderType2" value="1" checked="checked">
-									<label class="form-check-label" for="shaderType2">
-										Phong
-									</label>
-								</div>
 							</div>
 
 						</div>
@@ -221,7 +207,7 @@
 				}
 				window.onload = init;
 
-				//////////////////////////////////////////////////////////////////////////////////////// / Game Controls ////////////////////
+				//////////////////////////////////////////////////////////////////////////////////////// / Game Controls ////////////////
 
 				function fadeIn(element) {
 					var op = 0.1; // initial opacity
@@ -236,11 +222,13 @@
 					}, 25);
 				}
 
+				function normalize(val) {
+					return val / 255;
+				}
+
 				function changeLightColor(jscolor) {
-					console.log(jscolor.rgb[0] + jscolor.rgb[1] + jscolor.rgb[2])
-					gameData.lightPosition = [
-						jscolor.rgb[0], jscolor.rgb[1], jscolor.rgb[2]
-					]
+					gameData.lightColor = [normalize(jscolor.rgb[0]), normalize(jscolor.rgb[1]), normalize(jscolor.rgb[2]), 1.0]
+					console.log(gameData.lightColor)
 				}
 
 				$(document).ready(function () {
@@ -280,11 +268,6 @@
 							$('#lightHeightControl').show('slow');
 							$('#lightDirectionControl').hide('slow');
 						}
-					});
-
-					$('input:radio[name=shaderType]').change(function () {
-						console.log($(this).val());
-						gameData.Shader = Number.parseInt($(this).val());
 					});
 
 					window.newGoal = function (who) {
