@@ -1,4 +1,4 @@
-attribute vec3 inPosition; 
+attribute vec3 inPosition;
 attribute vec3 inNormal;
 attribute vec2 inUVs;
 attribute vec2 inUV2s;
@@ -74,19 +74,15 @@ void main() {
 
 	//Computing the ambient light contribution (Without the texture contribution)
 	vec4 ambLight = ambientLightColor * ambientLightInfluence;
-	if(lightType == 5){
-		goureaudSpecular = vec4(0.0, 0.0, 0.0, 0.0);
-		goureaudDiffuseAndAmbient = vec4(1.0, 1.0, 1.0, 1.0);
-	}else {
-		//Computing the diffuse component of light (Without the texture contribution)
-		vec4 diffuse = lightColor * clamp(dot(nlightDirection, nNormal), 0.0, 1.0) * lightDimension;
 
-		//Reflection vector for Phong model
-		vec3 reflection = -reflect(nlightDirection, nNormal);
-		vec4 specular = mSpecColor * lightColor * pow(clamp(dot(reflection, nEyeDirection),0.0, 1.0), mSpecPower) * lightDimension;
+	//Computing the diffuse component of light (Without the texture contribution)
+	vec4 diffuse = lightColor * clamp(dot(nlightDirection, nNormal), 0.0, 1.0) * lightDimension;
 
-		goureaudSpecular = specular;
-		goureaudDiffuseAndAmbient = diffuse + ambLight;
-	}
+	//Reflection vector for Phong model
+	vec3 reflection = -reflect(nlightDirection, nNormal);
+	vec4 specular = mSpecColor * lightColor * pow(clamp(dot(reflection, nEyeDirection),0.0, 1.0), mSpecPower) * lightDimension;
+
+	goureaudSpecular = specular;
+	goureaudDiffuseAndAmbient = diffuse + ambLight;
 
 }

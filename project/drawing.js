@@ -72,7 +72,7 @@ var lightDirectionObj = new Array();
 var lightPositionObj = new Array();
 
 var textureInfluence = 0.0;
-var ambientLightInfluence = 1.0;
+var ambientLightInfluence = 0;
 var ambientLightColor = [1.0, 1.0, 1.0, 1.0];
 
 // texture loader callback
@@ -89,10 +89,10 @@ var textureLoaderCallback = function() {
 }
 
 function loadShaders() {
-  utils.loadFiles([shaderDir + 'vs_p.glsl',
-      shaderDir + 'fs_p.glsl',
-      shaderDir + 'vs_g.glsl',
-      shaderDir + 'fs_g.glsl'
+  utils.loadFiles([shaderDir + 'vs_g.glsl',
+      shaderDir + 'fs_g.glsl',
+      shaderDir + 'vs_p.glsl',
+      shaderDir + 'fs_p.glsl'
     ],
     function(shaderText) {
       // odd numbers are VSs, even are FSs

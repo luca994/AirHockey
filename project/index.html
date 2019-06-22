@@ -102,18 +102,31 @@
 									</label>
 								</div>
 								<div id="customCameraControls" style="display:none; margin-top:10px; text-size:12px;">
-									Use <b>J</b> or <b>L</b> for X direction <br/>
-									Use <b>I</b> or <b>K</b> for Y direction
+									Use
+									<b>J</b>
+									or
+									<b>L</b>
+									for X direction
+									<br/>
+									Use
+									<b>I</b>
+									or
+									<b>K</b>
+									for Y direction
 								</div>
 							</div>
 						</div>
 
 						<div class="collapse" id="multiCollapseExample2">
 							<div class="card card-body">
-								<label for="customRange1">Position</label>
-								<input type="range" class="custom-range" min="0" max="5" step="0.1" id="lightPosition">
-								<label for="customRange2" style="margin-top:15px;">Direction</label>
-								<input type="range" class="custom-range" min="0" max="180" step="10" id="lightDirection">
+								<div id="lightHeightControl">
+									<label for="customRange1">Height</label>
+									<input type="range" class="custom-range" min="0" max="5" step="0.1" id="lightPosition">
+								</div>
+								<div id="lightDirectionControl">
+									<label for="customRange2" style="margin-top:15px;">Direction</label>
+									<input type="range" class="custom-range" min="0" max="180" step="10" id="lightDirection">
+								</div>
 								<label for="customRange3" style="margin-top:15px;">Color</label>
 								<input class="jscolor" onchange="changeLightColor(this.jscolor)" value="ffffff">
 								<label for="customRange3" style="margin-top:15px;">Type</label>
@@ -144,13 +157,13 @@
 
 								<label for="customRange4" style="margin-top:15px;">Shader</label>
 								<div class="form-check">
-									<input class="form-check-input" type="radio" name="shaderType" id="shaderType1" value="0" checked="checked">
+									<input class="form-check-input" type="radio" name="shaderType" id="shaderType1" value="0">
 									<label class="form-check-label" for="shaderType1">
 										Goreaud
 									</label>
 								</div>
 								<div class="form-check">
-									<input class="form-check-input" type="radio" name="shaderType" id="shaderType2" value="1">
+									<input class="form-check-input" type="radio" name="shaderType" id="shaderType2" value="1" checked="checked">
 									<label class="form-check-label" for="shaderType2">
 										Phong
 									</label>
@@ -208,7 +221,7 @@
 				}
 				window.onload = init;
 
-				//////////////////////////////////////////////////////////////////////////////////////// /////// Game Controls //////////////////////////
+				//////////////////////////////////////////////////////////////////////////////////////// / Game Controls ////////////////////
 
 				function fadeIn(element) {
 					var op = 0.1; // initial opacity
@@ -237,11 +250,10 @@
 						gameData.camera = Number.parseInt($(this).val());
 						if (gameData.camera == GameData.CAMERAS.CUSTOM) {
 							$('#customCameraControls').show('slow')
-						}else{
+						} else {
 							$('#customCameraControls').hide('slow')
 						}
 					});
-
 
 					document.getElementById("lightPosition").oninput = function () {
 						console.log("changed light pos: " + this.value);
@@ -255,6 +267,19 @@
 					$('input:radio[name=lightType]').change(function () {
 						console.log($(this).val());
 						gameData.lightType = Number.parseInt($(this).val());
+						if (gameData.lightType == GameData.LIGHTTYPES.SPOT) {
+							$('#lightHeightControl').show('slow');
+							$('#lightDirectionControl').show('slow');
+						} else if (gameData.lightType == GameData.LIGHTTYPES.DIRECTIONAL) {
+							$('#lightHeightControl').hide('slow');
+							$('#lightDirectionControl').show('slow');
+						} else if (gameData.lightType == GameData.LIGHTTYPES.POINT) {
+							$('#lightHeightControl').show('slow');
+							$('#lightDirectionControl').hide('slow');
+						} else if (gameData.lightType == GameData.LIGHTTYPES.POINT_DECAY) {
+							$('#lightHeightControl').show('slow');
+							$('#lightDirectionControl').hide('slow');
+						}
 					});
 
 					$('input:radio[name=shaderType]').change(function () {
