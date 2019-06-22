@@ -36,12 +36,15 @@ vec4 lightModel(int lt, vec3 pos) {
 
 	if(lt == 1) { 			//Directional light
 		nLightDir = - normalize(lightDirection);
+
 	} else if(lt == 2) {	//Point light
 		nLightDir = normalize(lightPosition - pos);
+
 	} else if(lt == 3) {	//Point light (decay)
 		float lLen = length(lightPosition - pos);
 		nLightDir = normalize(lightPosition - pos);
-		lDim = 160.0 / (lLen * lLen);
+		lDim = 20.0 / (lLen);
+
 	} else if(lt == 4) {	//Spot light
 		nLightDir = normalize(lightPosition - pos);
 		lCone = -dot(nLightDir, normalize(lightDirection));
@@ -76,17 +79,13 @@ void main() {
 	//We assume that the ambient color of the object is identical to it diffuse color (including its texture contribution)
 	vec4 ambLight = diffuseTextureColorMixture * ambientLightColor * ambientLightInfluence;
 
-	if(lightType == 5){
-		gl_FragColor = diffuseTextureColorMixture;
-	}else{
-		//Computing the diffuse component of light
-		vec4 diffuse = diffuseTextureColorMixture * lightColor * clamp(dot(nlightDirection, nNormal), 0.0, 1.0) * lightDimension;
+	//Computing the diffuse component of light
+	vec4 diffuse = diffuseTextureColorMixture * lightColor * clamp(dot(nlightDirection, nNormal), 0.0, 1.0) * lightDimension;
 
-		//Reflection vector for Phong model
-		vec3 reflection = -reflect(nlightDirection, nNormal);
-		vec4 specular = mSpecColor * lightColor * pow(clamp(dot(reflection, nEyeDirection),0.0, 1.0), mSpecPower) * lightDimension;
-		gl_FragColor = min(ambLight + diffuse + specular, vec4(1.0, 1.0, 1.0, 1.0));
-	}
+	//Reflection vector for Phong model
+	vec3 reflection = -reflect(nlightDirection, nNormal);
+	vec4 specular = mSpecColor * lightColor * pow(clamp(dot(reflection, nEyeDirection),0.0, 1.0), mSpecPower) * lightDimension;
+	gl_FragColor = min(ambLight + diffuse + specular, vec4(1.0, 1.0, 1.0, 1.0));
 
 
 }
