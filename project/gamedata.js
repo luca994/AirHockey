@@ -21,7 +21,7 @@
       cvx: 0,
       cvy: 0
     }
-    this.lightPosition = [0.0, 1.5, 0.0];
+    this.lightPosition = [0.0, 2.4, 0.0];
     this.dirLightAlpha = -utils.degToRad(90);
     this.dirLightBeta = 0;
     this.lightDirection = [Math.cos(this.dirLightAlpha) * Math.cos(this.dirLightBeta),

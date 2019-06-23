@@ -1,9 +1,11 @@
-attribute vec3 inPosition;
-attribute vec3 inNormal;
-attribute vec2 inUVs;
-attribute vec2 inUV2s;
+#version 300 es
 
-uniform mat4 wvpMatrix;
+in vec3 inPosition;
+in vec3 inNormal;
+in vec2 inUVs;
+
+uniform mat4 pMatrix;
+uniform mat4 wMatrix;
 
 uniform vec4 mSpecColor;
 uniform float mSpecPower;
@@ -18,71 +20,69 @@ uniform float ambientLightInfluence;
 
 uniform vec3 eyePosition;
 
-varying vec2 fsUVs;
-varying vec2 fsUV2s;
+out vec2 fsUVs;
 
 //We have to separate the components that require the texture from the others.
-varying vec4 goureaudSpecular;
-varying vec4 goureaudDiffuseAndAmbient;
-
-vec4 lightModel(int lt, vec3 pos) {
-
-	//The normalize light direction
-    vec3 nLightDir;
-
-	//Float to store light dimension and cone length
-	float lDim, lCone;
-
-	lDim = 1.0;
-
-	if(lt == 1) { 			//Directional light
-		nLightDir = - normalize(lightDirection);
-	} else if(lt == 2) {	//Point light
-		nLightDir = normalize(lightPosition - pos);
-	} else if(lt == 3) {	//Point light (decay)
-		float lLen = length(lightPosition - pos);
-		nLightDir = normalize(lightPosition - pos);
-		lDim = 160.0 / (lLen * lLen);
-	} else if(lt == 4) {	//Spot light
-		nLightDir = normalize(lightPosition - pos);
-		lCone = -dot(nLightDir, normalize(lightDirection));
-		if(lCone < 0.5) {
-			lDim = 0.0;
-		} else if(lCone > 0.7) {
-			lDim = 1.0;
-		} else {
-			lDim = (lCone - 0.5) / 0.2;
-		}
-	}
-	return vec4(nLightDir, lDim);
-}
+out vec4 goureaudSpecular;
+out vec4 goureaudDiffuse;
+out vec4 goureaudAmbient;
 
 
 void main() {
+    vec3 fsPosition = (wMatrix * vec4(inPosition, 1.0)).xyz;
+    vec3 fsNormal = inNormal;
 
-	fsUVs = inUVs;
-	fsUV2s = inUV2s;
-	gl_Position = wvpMatrix * vec4(inPosition, 1.0);
+    float targetDistance = 5.0; // The distance at which light intensity is maximum
+    float LDecay = 1.0;
 
-	vec3 nEyeDirection = normalize(eyePosition - inPosition);
-	vec3 nNormal = normalize(inNormal);
+	vec3 normalVec = normalize(fsNormal);
+	vec3 eyedirVec = normalize(eyePosition - fsPosition);
 
 
-	vec4 lm = lightModel(lightType, inPosition);
-	vec3 nlightDirection = lm.rgb;
-	float lightDimension = lm.a;
+    float lCone,lDim;
+    vec3 lightDir = lightDirection;
+    vec4 lightCol = lightColor;
 
-	//Computing the ambient light contribution (Without the texture contribution)
-	vec4 ambLight = ambientLightColor * ambientLightInfluence;
 
-	//Computing the diffuse component of light (Without the texture contribution)
-	vec4 diffuse = lightColor * clamp(dot(nlightDirection, nNormal), 0.0, 1.0) * lightDimension;
 
-	//Reflection vector for Phong model
-	vec3 reflection = -reflect(nlightDirection, nNormal);
-	vec4 specular = mSpecColor * lightColor * pow(clamp(dot(reflection, nEyeDirection),0.0, 1.0), mSpecPower) * lightDimension;
+    if(lightType == 1) { 	    //Directional light
+        lightDir = -normalize(lightDirection);
+        lightCol = lightColor;
+    } else if(lightType == 2) {	//Point light
+        lightDir = normalize(lightPosition - fsPosition);
+        lightCol = lightColor;
+    } else if(lightType == 3) {	//Point light (decay)
+        lightDir = normalize(lightPosition - fsPosition);
+        lightCol = lightColor * pow(targetDistance / length(lightPosition - fsPosition), LDecay);
+    } else if(lightType == 4) {	//Spot light
+        lightDir = normalize(lightPosition - fsPosition);
+        lCone = -dot(lightDir, lightDirection);
+		if(lCone < 0.4) {
+			lDim = 0.0;
+		} else if(lCone > 0.7) {
+				lDim = 1.0;
+		} else {
+			lDim = (lCone - 0.5) / 0.2;
+		}
+        lightCol = lightColor * lDim;
+    }
 
-	goureaudSpecular = specular;
-	goureaudDiffuseAndAmbient = diffuse + ambLight;
+    // Lambert diffuse
+    vec4 diffuse = lightCol * clamp(dot(normalVec, lightDir),0.0,1.0);
+
+    // Phong specular
+    vec3 reflection = -reflect(lightDir, normalVec);
+    vec4 specular = lightCol * pow(max(dot(reflection, eyedirVec), 0.0), mSpecPower) * mSpecColor;
+
+    // Ambient light
+    vec4 ambient = ambientLightColor * ambientLightInfluence;
+
+    goureaudSpecular = specular;
+    goureaudDiffuse = diffuse;
+    goureaudAmbient = ambient;
+
+    fsUVs = inUVs;
+
+    gl_Position = pMatrix * vec4(inPosition, 1.0);
 
 }

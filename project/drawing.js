@@ -20,7 +20,8 @@ var textureInfluenceHandle = new Array(2);
 var ambientLightInfluenceHandle = new Array(2);
 var ambientLightColorHandle = new Array(2);
 
-var matrixPositionHandle = new Array(2);
+var pMatrixPositionHandle = new Array(2);
+var wMatrixPositionHandle = new Array(2);
 var materialDiffColorHandle = new Array(2);
 var lightDirectionHandle = new Array(2);
 var lightPositionHandle = new Array(2);
@@ -29,7 +30,7 @@ var lightTypeHandle = new Array(2);
 var eyePositionHandle = new Array(2);
 var materialSpecColorHandle = new Array(2);
 var materialSpecPowerHandle = new Array(2);
-var objectSpecularPower = 20.0;
+var objectSpecularPower = 10.0;
 
 var sceneObjects = 0; //total number of nodes
 var currentLoadedObj = 0;
@@ -72,7 +73,7 @@ var lightDirectionObj = new Array();
 var lightPositionObj = new Array();
 
 var textureInfluence = 0.0;
-var ambientLightInfluence = 0;
+var ambientLightInfluence = 0.0;
 var ambientLightColor = [1.0, 1.0, 1.0, 1.0];
 
 // texture loader callback
@@ -130,7 +131,8 @@ function loadShaders() {
     vertexNormalHandle[i] = gl.getAttribLocation(shaderProgram[i], 'inNormal');
     vertexUVHandle[i] = gl.getAttribLocation(shaderProgram[i], 'inUVs');
 
-    matrixPositionHandle[i] = gl.getUniformLocation(shaderProgram[i], 'wvpMatrix');
+    pMatrixPositionHandle[i] = gl.getUniformLocation(shaderProgram[i], 'pMatrix');
+    wMatrixPositionHandle[i] = gl.getUniformLocation(shaderProgram[i], 'wMatrix');
 
     materialDiffColorHandle[i] = gl.getUniformLocation(shaderProgram[i], 'mDiffColor');
     materialSpecColorHandle[i] = gl.getUniformLocation(shaderProgram[i], 'mSpecColor');
@@ -265,10 +267,11 @@ function loadModel(modelName) {
       //*** mesh color
       diffuseColor[i] = loadedModel.materials[meshMatIndex].properties[diffuseColorPropertyIndex].value; // diffuse value
 
-      // diffuseColor[i].push(0.0); // Alpha value added
+      diffuseColor[i].push(1.0); // Alpha value added
+      console.log(diffuseColor[i]);
 
       specularColor[i] = loadedModel.materials[meshMatIndex].properties[specularColorPropertyIndex].value;
-      console.log("Specular: " + specularColor[i]);
+      specularColor[i].push(1.0);
 
       //vertices, normals and UV set 1
       vertexBufferObjectId[i] = gl.createBuffer();
@@ -543,7 +546,8 @@ function drawScene() {
   gl.useProgram(shaderProgram[gameData.Shader]);
 
   for (i = 0; i < sceneObjects; i++) {
-    gl.uniformMatrix4fv(matrixPositionHandle[gameData.Shader], gl.FALSE, utils.transposeMatrix(projectionMatrix[i]));
+    gl.uniformMatrix4fv(pMatrixPositionHandle[gameData.Shader], gl.FALSE, utils.transposeMatrix(projectionMatrix[i]));
+    gl.uniformMatrix4fv(wMatrixPositionHandle[gameData.Shader], gl.FALSE, utils.transposeMatrix(objectWorldMatrix[i]));
 
     textureInfluence = i == 0 || i == 8 ? 1.0 : 0.0
     gl.uniform1f(textureInfluenceHandle[gameData.Shader], textureInfluence);
