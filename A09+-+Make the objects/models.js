@@ -44,7 +44,7 @@ function buildGeometry() {
     for (var i = vert3.length - 1; i >= 0; i--) {
         vert3[i][0] += +0.5;
         vert3[i][1] += +0.5;
-        vert3[i][2] += +1; 
+        vert3[i][2] += +1;
     }
     var ind3 = [0, 1, 2, 0, 2, 3, 1, 0, 4, 4, 0, 3, 1, 5, 2, 1, 4, 5, 2, 5, 6, 5, 4, 6, 4, 3, 7, 4, 7, 6, 3, 2, 7, 7, 2, 6, 2, 8, 3, 3, 8, 7, 8, 9, 7, 2, 6, 8, 6, 9, 8, 7, 9, 6];
     var color3 = [0.0, 1.0, 0.0];
@@ -56,7 +56,7 @@ function buildGeometry() {
     ];
     var ind4 = [];
     var color4 = [1.0, 1.0, 0.0];
-    var slices4 = 90;
+    var slices4 = 50;
     for (i = 0; i < slices4; i++) {
         vert4[i + 1] = [Math.cos(2 * Math.PI / slices4 * i), -1.0, Math.sin(2 * Math.PI / slices4 * i)];
     }
@@ -77,21 +77,18 @@ function buildGeometry() {
     }
     addMesh(vert4, ind4, color4);
 
-    
+
     // Draws a Cylinder
     var vert5 = [];
-    var norm5 = [];
     var ind5 = [];
     var color5 = [1.0, 0.0, 1.0];
-    var slices5 = 90;
+    var slices5 = 50;
     for (i = 0; i < slices5; i++) {
         vert5[2 * i] = [Math.cos(2 * Math.PI / slices5 * i), -1.0, Math.sin(2 * Math.PI / slices5 * i)];
-        norm5[2 * i] = [Math.cos(2 * Math.PI / slices5 * i), -1.0, Math.sin(2 * Math.PI / slices5 * i)];
         vert5[2 * i + 1] = [Math.cos(2 * Math.PI / slices5 * i), 1.0, Math.sin(2 * Math.PI / slices5 * i)];
-        norm5[2 * i + 1] = [Math.cos(2 * Math.PI / slices5 * i), 1.0, Math.sin(2 * Math.PI / slices5 * i)];
     }
     j = 0
-    // Lateral area
+    // Lateral faces
     for (i = 0; i < slices5; i++) {
         ind5[j] = 2 * i;
         ind5[j + 1] = 2 * i + 1;
@@ -102,8 +99,7 @@ function buildGeometry() {
         j += 6
     }
     vert5[2 * slices5] = [0.0, 1.0, 0.0]
-    norm5[2 * slices5] = [0.0, 1.0, 0.0]
-    // Top area
+    // Top face
     for (i = 1; i <= 2 * slices5 - 1; i += 2) {
         ind5[j] = 2 * slices5;
         ind5[j + 1] = i;
@@ -111,8 +107,7 @@ function buildGeometry() {
         j += 3
     }
     vert5[2 * slices5 + 1] = [0.0, -1.0, 0.0]
-    norm5[2 * slices5 + 1] = [0.0, -1.0, 0.0]
-    // Bottom area
+    // Bottom face
     for (i = 0; i <= slices5 * 2 - 2; i += 2) {
         ind5[j] = 2 * slices5 + 1;
         ind5[j + 1] = i;
@@ -126,17 +121,20 @@ function buildGeometry() {
     var vert6 = [];
     var ind6 = [];
     var color6 = [0.0, 1.0, 1.0];
-    var sectors = 64;
-    var stacks = 64;
-    var ray = 1;
+    var sectors = 30; //horizontal slices
+    var stacks = 30; //vertical stacks
+    //make the vertices
     for (i = 0; i < sectors; i++)
         for (k = 0; k <= stacks; k++) {
+            //needed to make spaces bewteen stacks non linear
             phi = (Math.PI / 2) - Math.PI * k / stacks
+            //how much we separate the sectors
             theta = (2 * Math.PI) * i / sectors
-            vert6[stacks * i + k] = [(ray * Math.cos(phi) * Math.cos(theta)), ray * Math.sin(phi), (ray * Math.cos(phi) * Math.sin(theta))];
+            vert6[stacks * i + k] = [(Math.cos(phi) * Math.cos(theta)), Math.sin(phi), (Math.cos(phi) * Math.sin(theta))];
         }
     j = 0
-    // Top lateral area
+
+    // Top and lateral faces
     for (k = 0; k < stacks - 1; k++) {
         for (i = 0; i < sectors; i++) {
             ind6[j] = (i < sectors - 1) ? stacks * i + k + stacks : 0 + k;
@@ -148,6 +146,7 @@ function buildGeometry() {
             j += 6
         }
     }
+    //close bottom face
     for (i = 0; i < sectors; i++) {
         ind6[j] = stacks * sectors
         ind6[j + 1] = (i + 1) * stacks - 1
