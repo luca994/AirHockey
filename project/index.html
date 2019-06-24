@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-US">
-	<head>
-		<meta charset='utf-8'>
-		<title>Luke vs Andrea - AirHockey</title>
-		<script type="text/javascript" src="utils.js"></script>
-		<script type="text/javascript" src="lib/box2d.js"></script>
-		<script type="text/javascript" src="gamedata.js"></script>
-		<script type="text/javascript" src="gamephysics.js"></script>
-		<script type="text/javascript" src="drawing.js"></script>
-		<script src="jscolor.js"></script>
 
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-		<style media="screen">
-			.card {
+<head>
+    <meta charset='utf-8'>
+    <title>Luke vs Andrea - AirHockey</title>
+    <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript" src="lib/box2d.js"></script>
+    <script type="text/javascript" src="gamedata.js"></script>
+    <script type="text/javascript" src="gamephysics.js"></script>
+    <script type="text/javascript" src="drawing.js"></script>
+    <script src="jscolor.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style media="screen">
+        .card {
 				color: black;
 			}
 			#gameControls {
@@ -36,248 +35,256 @@
 				overflow: hidden;
 			}
 		</style>
-	</head>
-	<body>
+</head>
 
-		<table>
-			<tr>
-				<td>
-					<canvas id="c" width="800" height="600"></canvas>
-				</td>
-			</tr>
-		</table>
+<body>
+    <table>
+        <tr>
+            <td>
+                <canvas id="c" width="800" height="600"></canvas>
+            </td>
+        </tr>
+    </table>
+    <div class="accordion border-top-0 border-left-0 border-right border-bottom border border-primary" id="gameControls">
+        <div class="card">
+            <div class="card-header" id="headingOne" style="padding:3px;">
+                <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <b>Game Controls</b>
+                    </button>
+                </h2>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body overflow-auto" style="max-height:600px">
+                    <h5 class="card-title">
+                        <button class="btn btn-success" style="text-align:left;" id="luke_btn">
+                            Luke
+                            <span class="badge badge-light float-right" style="top:1px;" id="luke_points">0</span>
+                        </button>
+                        <button class="btn btn-warning" style="text-align:left;" id="andrea_btn">
+                            Andrea
+                            <span class="badge badge-light float-right" style="top:1px;" id="andrea_points">0</span>
+                        </button>
+                    </h5>
+                    <hr>
+                    <a class="btn btn-outline-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="true" aria-controls="multiCollapseExample1">Camera Settings</a>
+                    <a class="btn btn-outline-primary" style="margin-bottom:5px;" data-toggle="collapse" href="#multiCollapseExample2" role="button" aria-expanded="true" aria-controls="multiCollapseExample2">Light Settings</a>
+                    <div class="collapse" id="multiCollapseExample1" style="margin-bottom:5px;">
+                        <div class="card card-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting1" value="0" checked="checked">
+                                <label class="form-check-label" for="cameraSetting1">
+                                    On Andrea
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting2" value="1">
+                                <label class="form-check-label" for="cameraSetting2">
+                                    Top
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting3" value="2">
+                                <label class="form-check-label" for="cameraSetting3">
+                                    On Luke
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting4" value="3">
+                                <label class="form-check-label" for="cameraSetting4">
+                                    Custom
+                                </label>
+                            </div>
+                            <div id="customCameraControls" style="display:none; margin-top:10px; text-size:12px;">
+                                Use
+                                <b>J</b>
+                                or
+                                <b>L</b>
+                                for X direction
+                                <br />
+                                Use
+                                <b>I</b>
+                                or
+                                <b>K</b>
+                                for Y direction
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collapse" id="multiCollapseExample2">
+                        <div class="card card-body">
+                            <div id="lightHeightControl">
+                                <label for="customRange1">Height</label>
+                                <input type="range" class="custom-range" min="0" max="5" step="0.1" id="lightPosition">
+                            </div>
+                            <div id="lightDirectionControl">
+                                <label for="customRange2" style="margin-top:15px;">Direction</label>
+                                <input type="range" class="custom-range" min="0" max="180" step="10" id="lightDirection">
+                            </div>
+                            <label for="customRange3" style="margin-top:15px;">Color</label>
+                            <input class="jscolor" onchange="changeLightColor(this.jscolor)" value="ffffff">
+                            <label for="customRange3" style="margin-top:15px;">Type</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="lightType" id="lightType1" value="4" checked="checked">
+                                <label class="form-check-label" for="lightType1">
+                                    Spot
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="lightType" id="lightType2" value="1">
+                                <label class="form-check-label" for="lightType2">
+                                    Directional
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="lightType" id="lightType3" value="2">
+                                <label class="form-check-label" for="lightType3">
+                                    Point
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="lightType" id="lightType3" value="3">
+                                <label class="form-check-label" for="lightType3">
+                                    Point Decay
+                                </label>
+                            </div>
+                            <label for="customRange4" style="margin-top:15px;">Shader</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="shaderType" id="shaderType1" value="0">
+                                <label class="form-check-label" for="shaderType1">
+                                    Goreaud
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="shaderType" id="shaderType2" value="1" checked="checked">
+                                <label class="form-check-label" for="shaderType2">
+                                    Phong
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="//code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="//cdn.rawgit.com/twbs/bootstrap/v4.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+        function init() {
+            canvas = document.getElementById("c");
+            try {
+                //get Canvas without aplpha channel
+                gl = canvas.getContext("webgl2", { alpha: false });
+            } catch (e) {
+                console.log(e);
+            }
+            if (gl) {
+                //Setting the size for the canvas equal to half the browser window and other useful parameters
+                var w = canvas.clientWidth;
+                var h = canvas.clientHeight;
+                gl.clearColor(1.0, 1.0, 1.0, 1.0);
+                gl.viewport(0.0, 0.0, w, h);
+                gl.enable(gl.DEPTH_TEST);
+                window.onresize = doResize;
+                doResize();
 
-		<div class="accordion border-top-0 border-left-0 border-right border-bottom border border-primary" id="gameControls">
-			<div class="card">
-				<div class="card-header" id="headingOne" style="padding:3px;">
-					<h2 class="mb-0">
-						<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-							<b>Game Controls</b>
-						</button>
-					</h2>
-				</div>
+                //Open the json file containing the 3D model to load, parse it to retreive objects' data and creates the VBO and IBO from them The vertex format is (x,y,z,nx,ny,nz,u,v)
+                loadModel("table.json");
+                loadModel("paddle.json");
+                loadModel("paddle.json");
+                loadModel("puck.json");
+                loadModel("floor1.json");
 
-				<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-					<div class="card-body overflow-auto" style="max-height:600px">
+                gameData.init();
+                simulation = new GamePhysics(gameData);
+                gameData.setState(GameData.STATES.PLAYING);
 
-						<h5 class="card-title">
-							<button class="btn btn-success" style="text-align:left;" id="luke_btn">
-								Luke
-								<span class="badge badge-light float-right" style="top:1px;" id="luke_points">0</span>
-							</button>
-							<button class="btn btn-warning" style="text-align:left;" id="andrea_btn">
-								Andrea
-								<span class="badge badge-light float-right" style="top:1px;" id="andrea_points">0</span>
-							</button>
-						</h5>
+                loadShaders();
 
-						<hr>
-						<a class="btn btn-outline-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="true" aria-controls="multiCollapseExample1">Camera Settings</a>
-						<a class="btn btn-outline-primary" style="margin-bottom:5px;" data-toggle="collapse" href="#multiCollapseExample2" role="button" aria-expanded="true" aria-controls="multiCollapseExample2">Light Settings</a>
+                //Setting up the interaction using keys initInteraction(); Rendering cycle
+                drawScene();
 
-						<div class="collapse" id="multiCollapseExample1" style="margin-bottom:5px;">
-							<div class="card card-body">
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting1" value="0" checked="checked">
-									<label class="form-check-label" for="cameraSetting1">
-										On Andrea
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting2" value="1">
-									<label class="form-check-label" for="cameraSetting2">
-										Top
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting3" value="2">
-									<label class="form-check-label" for="cameraSetting3">
-										On Luke
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="cameraSetting" id="cameraSetting4" value="3">
-									<label class="form-check-label" for="cameraSetting4">
-										Custom
-									</label>
-								</div>
-								<div id="customCameraControls" style="display:none; margin-top:10px; text-size:12px;">
-									Use
-									<b>J</b>
-									or
-									<b>L</b>
-									for X direction
-									<br/>
-									Use
-									<b>I</b>
-									or
-									<b>K</b>
-									for Y direction
-								</div>
-							</div>
-						</div>
+            } else {
+                alert("Error: Your browser does not appear to support WebGL.");
+            }
+        }
+        window.onload = init;
 
-						<div class="collapse" id="multiCollapseExample2">
-							<div class="card card-body">
-								<div id="lightHeightControl">
-									<label for="customRange1">Height</label>
-									<input type="range" class="custom-range" min="0" max="5" step="0.1" id="lightPosition">
-								</div>
-								<div id="lightDirectionControl">
-									<label for="customRange2" style="margin-top:15px;">Direction</label>
-									<input type="range" class="custom-range" min="0" max="180" step="10" id="lightDirection">
-								</div>
-								<label for="customRange3" style="margin-top:15px;">Color</label>
-								<input class="jscolor" onchange="changeLightColor(this.jscolor)" value="ffffff">
-								<label for="customRange3" style="margin-top:15px;">Type</label>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="lightType" id="lightType1" value="4" checked="checked">
-									<label class="form-check-label" for="lightType1">
-										Spot
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="lightType" id="lightType2" value="1">
-									<label class="form-check-label" for="lightType2">
-										Directional
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="lightType" id="lightType3" value="2">
-									<label class="form-check-label" for="lightType3">
-										Point
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="lightType" id="lightType3" value="3">
-									<label class="form-check-label" for="lightType3">
-										Point Decay
-									</label>
-								</div>
-							</div>
+        //////////////////////////////////////////////////////////////////////////////////////// / Game Controls ////////////////
 
-						</div>
-					</div>
-				</div>
+        function fadeIn(element) {
+            var op = 0.1; // initial opacity
+            element.style.display = 'block';
+            var timer = setInterval(function() {
+                if (op >= 1) {
+                    clearInterval(timer);
+                }
+                element.style.opacity = op;
+                element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+                op += op * 0.1;
+            }, 25);
+        }
 
-			</div>
+        function normalize(val) {
+            return val / 255;
+        }
 
-			<script src="//code.jquery.com/jquery-3.3.1.js"></script>
-			<script src="//cdn.rawgit.com/twbs/bootstrap/v4.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        function changeLightColor(jscolor) {
+            gameData.lightColor = [normalize(jscolor.rgb[0]), normalize(jscolor.rgb[1]), normalize(jscolor.rgb[2]), 1.0]
+            console.log(gameData.lightColor)
+        }
 
-			<script>
-				function init() {
-					canvas = document.getElementById("c");
-					try {
-						//get Canvas without aplpha channel
-						gl = canvas.getContext("webgl2", {alpha: false});
-					} catch (e) {
-						console.log(e);
-					}
-					if (gl) {
-						//Setting the size for the canvas equal to half the browser window and other useful parameters
-						var w = canvas.clientWidth;
-						var h = canvas.clientHeight;
-						gl.clearColor(1.0, 1.0, 1.0, 1.0);
-						gl.viewport(0.0, 0.0, w, h);
-						gl.enable(gl.DEPTH_TEST);
-						window.onresize = doResize;
-						doResize();
+        $(document).ready(function() {
+            $('input:radio[name=cameraSetting]').change(function() {
+                console.log($(this).val());
+                gameData.camera = Number.parseInt($(this).val());
+                if (gameData.camera == GameData.CAMERAS.CUSTOM) {
+                    $('#customCameraControls').show('slow')
+                } else {
+                    $('#customCameraControls').hide('slow')
+                }
+            });
 
-						//Open the json file containing the 3D model to load, parse it to retreive objects' data and creates the VBO and IBO from them The vertex format is (x,y,z,nx,ny,nz,u,v)
-						loadModel("table.json");
-						loadModel("paddle.json");
-						loadModel("paddle.json");
-						loadModel("puck.json");
-						loadModel("floor1.json");
+            document.getElementById("lightPosition").oninput = function() {
+                console.log("changed light pos: " + this.value);
+                gameData.lightPosition = [0.0, this.value, 0.0];
+            }
+            document.getElementById("lightDirection").oninput = function() {
+                console.log("changed light dir: " + this.value);
+                gameData.updateLightDir(-utils.degToRad(this.value));
+            }
+            $('input:radio[name=shaderType]').change(function() {
+                console.log($(this).val());
+                gameData.Shader = Number.parseInt($(this).val());
+            });
 
-						gameData.init();
-						simulation = new GamePhysics(gameData);
-						gameData.setState(GameData.STATES.PLAYING);
+            $('input:radio[name=lightType]').change(function() {
+                console.log($(this).val());
+                gameData.lightType = Number.parseInt($(this).val());
+                if (gameData.lightType == GameData.LIGHTTYPES.SPOT) {
+                    $('#lightHeightControl').show('slow');
+                    $('#lightDirectionControl').show('slow');
+                } else if (gameData.lightType == GameData.LIGHTTYPES.DIRECTIONAL) {
+                    $('#lightHeightControl').hide('slow');
+                    $('#lightDirectionControl').show('slow');
+                } else if (gameData.lightType == GameData.LIGHTTYPES.POINT) {
+                    $('#lightHeightControl').show('slow');
+                    $('#lightDirectionControl').hide('slow');
+                } else if (gameData.lightType == GameData.LIGHTTYPES.POINT_DECAY) {
+                    $('#lightHeightControl').show('slow');
+                    $('#lightDirectionControl').hide('slow');
+                }
+            });
 
-						loadShaders();
+            window.newGoal = function(who) {
+                if (who == 1) {
+                    fadeIn(document.getElementById("luke_btn"));
+                    document.getElementById("luke_points").innerHTML = gameData.luke.score;
+                } else {
+                    fadeIn(document.getElementById("andrea_btn"));
+                    document.getElementById("andrea_points").innerHTML = gameData.andrea.score;
+                }
+            }
+        });
+        </script>
+</body>
 
-						//Setting up the interaction using keys initInteraction(); Rendering cycle
-						drawScene();
-
-					} else {
-						alert("Error: Your browser does not appear to support WebGL.");
-					}
-				}
-				window.onload = init;
-
-				//////////////////////////////////////////////////////////////////////////////////////// / Game Controls ////////////////
-
-				function fadeIn(element) {
-					var op = 0.1; // initial opacity
-					element.style.display = 'block';
-					var timer = setInterval(function () {
-						if (op >= 1) {
-							clearInterval(timer);
-						}
-						element.style.opacity = op;
-						element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-						op += op * 0.1;
-					}, 25);
-				}
-
-				function normalize(val) {
-					return val / 255;
-				}
-
-				function changeLightColor(jscolor) {
-					gameData.lightColor = [normalize(jscolor.rgb[0]), normalize(jscolor.rgb[1]), normalize(jscolor.rgb[2]), 1.0]
-					console.log(gameData.lightColor)
-				}
-
-				$(document).ready(function () {
-					$('input:radio[name=cameraSetting]').change(function () {
-						console.log($(this).val());
-						gameData.camera = Number.parseInt($(this).val());
-						if (gameData.camera == GameData.CAMERAS.CUSTOM) {
-							$('#customCameraControls').show('slow')
-						} else {
-							$('#customCameraControls').hide('slow')
-						}
-					});
-
-					document.getElementById("lightPosition").oninput = function () {
-						console.log("changed light pos: " + this.value);
-						gameData.lightPosition = [0.0, this.value, 0.0];
-					}
-					document.getElementById("lightDirection").oninput = function () {
-						console.log("changed light dir: " + this.value);
-						gameData.updateLightDir(-utils.degToRad(this.value));
-					}
-
-					$('input:radio[name=lightType]').change(function () {
-						console.log($(this).val());
-						gameData.lightType = Number.parseInt($(this).val());
-						if (gameData.lightType == GameData.LIGHTTYPES.SPOT) {
-							$('#lightHeightControl').show('slow');
-							$('#lightDirectionControl').show('slow');
-						} else if (gameData.lightType == GameData.LIGHTTYPES.DIRECTIONAL) {
-							$('#lightHeightControl').hide('slow');
-							$('#lightDirectionControl').show('slow');
-						} else if (gameData.lightType == GameData.LIGHTTYPES.POINT) {
-							$('#lightHeightControl').show('slow');
-							$('#lightDirectionControl').hide('slow');
-						} else if (gameData.lightType == GameData.LIGHTTYPES.POINT_DECAY) {
-							$('#lightHeightControl').show('slow');
-							$('#lightDirectionControl').hide('slow');
-						}
-					});
-
-					window.newGoal = function (who) {
-						if (who == 1) {
-							fadeIn(document.getElementById("luke_btn"));
-							document.getElementById("luke_points").innerHTML = gameData.luke.score;
-						} else {
-							fadeIn(document.getElementById("andrea_btn"));
-							document.getElementById("andrea_points").innerHTML = gameData.andrea.score;
-						}
-					}
-				});
-			</script>
-		</body>
-	</html>
+</html>
