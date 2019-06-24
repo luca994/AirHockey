@@ -20,7 +20,8 @@ var textureInfluenceHandle = new Array(2);
 var ambientLightInfluenceHandle = new Array(2);
 var ambientLightColorHandle = new Array(2);
 
-var pMatrixPositionHandle = new Array(2);
+var wvpMatrixPositionHandle = new Array(2);
+var nMatrixPositionHandle = new Array(2);
 var wMatrixPositionHandle = new Array(2);
 var materialDiffColorHandle = new Array(2);
 var lightDirectionHandle = new Array(2);
@@ -39,7 +40,7 @@ var currentLoadedObj = 0;
 var vertexBufferObjectId = new Array();
 var indexBufferObjectId = new Array();
 var objectWorldMatrix = new Array();
-var projectionMatrix = new Array();
+var WVPmatrix = new Array();
 var facesNumber = new Array();
 var diffuseColor = new Array(); //diffuse material colors of objs
 var specularColor = new Array();
@@ -131,7 +132,8 @@ function loadShaders() {
     vertexNormalHandle[i] = gl.getAttribLocation(shaderProgram[i], 'inNormal');
     vertexUVHandle[i] = gl.getAttribLocation(shaderProgram[i], 'inUVs');
 
-    pMatrixPositionHandle[i] = gl.getUniformLocation(shaderProgram[i], 'pMatrix');
+    wvpMatrixPositionHandle[i] = gl.getUniformLocation(shaderProgram[i], 'wvpMatrix');
+    nMatrixPositionHandle[i] = gl.getUniformLocation(shaderProgram[i], 'nMatrix');
     wMatrixPositionHandle[i] = gl.getUniformLocation(shaderProgram[i], 'wMatrix');
 
     materialDiffColorHandle[i] = gl.getUniformLocation(shaderProgram[i], 'mDiffColor');
@@ -165,7 +167,7 @@ function loadModel(modelName) {
     //preparing to store objects' world matrix & the lights & material properties per object
     for (i = currentLoadedObj; i < sceneObjects; i++) {
       objectWorldMatrix[i] = new utils.identityMatrix();
-      projectionMatrix[i] = new utils.identityMatrix();
+      WVPmatrix[i] = new utils.identityMatrix();
       diffuseColor[i] = [1.0, 1.0, 1.0, 1.0];
       specularColor[i] = [1.0, 1.0, 1.0, 1.0];
       observerPositionObj[i] = new Array(3);
@@ -516,8 +518,8 @@ function computeMatrices() {
 
 
   for (i = 0; i < sceneObjects; i++) {
-    projectionMatrix[i] = utils.multiplyMatrices(viewMatrix, objectWorldMatrix[i]);
-    projectionMatrix[i] = utils.multiplyMatrices(perspectiveMatrix, projectionMatrix[i]);
+    WVPmatrix[i] = utils.multiplyMatrices(viewMatrix, objectWorldMatrix[i]);
+    WVPmatrix[i] = utils.multiplyMatrices(perspectiveMatrix, WVPmatrix[i]);
 
     lightDirectionObj[i] = gameData.lightDirection;
 
@@ -546,8 +548,11 @@ function drawScene() {
   gl.useProgram(shaderProgram[gameData.Shader]);
 
   for (i = 0; i < sceneObjects; i++) {
-    gl.uniformMatrix4fv(pMatrixPositionHandle[gameData.Shader], gl.FALSE, utils.transposeMatrix(projectionMatrix[i]));
+    var nMatrix = utils.invertMatrix(utils.transposeMatrix(objectWorldMatrix[i]));
+    gl.uniformMatrix4fv(wvpMatrixPositionHandle[gameData.Shader], gl.FALSE, utils.transposeMatrix(WVPmatrix[i]));
     gl.uniformMatrix4fv(wMatrixPositionHandle[gameData.Shader], gl.FALSE, utils.transposeMatrix(objectWorldMatrix[i]));
+    gl.uniformMatrix4fv(nMatrixPositionHandle[gameData.Shader], gl.FALSE, utils.transposeMatrix(nMatrix));
+
 
     textureInfluence = i == 0 || i == 8 ? 1.0 : 0.0
     gl.uniform1f(textureInfluenceHandle[gameData.Shader], textureInfluence);

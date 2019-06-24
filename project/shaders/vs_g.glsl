@@ -4,8 +4,9 @@ in vec3 inPosition;
 in vec3 inNormal;
 in vec2 inUVs;
 
-uniform mat4 pMatrix;
+uniform mat4 wvpMatrix;
 uniform mat4 wMatrix;
+uniform mat4 nMatrix;
 
 uniform vec4 mSpecColor;
 uniform float mSpecPower;
@@ -30,7 +31,7 @@ out vec4 goureaudAmbient;
 
 void main() {
     vec3 fsPosition = (wMatrix * vec4(inPosition, 1.0)).xyz;
-    vec3 fsNormal = inNormal;
+    vec3 fsNormal = mat3(nMatrix) * inNormal;
 
     float targetDistance = 5.0; // The distance at which light intensity is maximum
     float LDecay = 1.0;
@@ -83,6 +84,6 @@ void main() {
 
     fsUVs = inUVs;
 
-    gl_Position = pMatrix * vec4(inPosition, 1.0);
+    gl_Position = wvpMatrix * vec4(inPosition, 1.0);
 
 }
