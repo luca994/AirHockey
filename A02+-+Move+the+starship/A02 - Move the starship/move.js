@@ -6,6 +6,7 @@ function move() {
 					   0.0,		0.0,		0.0,		1.0];
 
 	// Rotate of 30 degrees on the y axis
+	// 0.866 = Math.cos(Math.PI/6)); 0.5 = Math.sin(Math.PI/6);
 	var R1 =  [0.866,	0.0,		0.5,		0.0,
 			   0.0,		1.0,		0.0,		0.0,
 			   0.5,		0.0,		-0.866,		0.0,
@@ -24,7 +25,7 @@ function move() {
 			   0.0,		0.0,		0.0,		1.0];
 
 	// Mirror over the yz plane
-	var S3 =  [-1.0,	0.0,		0.0,		0.0,
+	var S3 =  			[-1.0,	0.0,		0.0,		0.0,
 						   0.0,		1.0,		0.0,		0.0,
 						   0.0,		0.0,		1.0,		0.0,
 						   0.0,		0.0,		0.0,		1.0];
