@@ -19,21 +19,24 @@ function worldViewProjection(carx, cary, carz, cardir, camx, camy, camz, aspectR
         0, 0, 1, carz,
         0, 0, 0, 1
     ];
-    var lrRot = utils.MakeRotateYMatrix(cardir);
-    world = utils.multiplyMatrices(world, lrRot);
+    world = utils.multiplyMatrices(world, utils.MakeRotateYMatrix(cardir));
 
     var view = [1, 0, 0, 0,
-		        0, 1, 0, 0,
-		        0, 0, 1, 0,
-		        0, 0, 0, 1
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1
     ];
     // need cross products here:
     // cx=ay∗bz−az∗by, cy=az∗bx−ax∗bz, cz=ax∗by−ay∗bx
     // but utils makes the calculations with just the three param vectors
     let viewMatrixPosition = [camx, camy, camz];
     let viewMatrixTarget = [carx, cary, carz];
-    let viewMatrixUpVector = [0,1,0];
+    let viewMatrixUpVector = [0, 1, 0];
     view = utils.multiplyMatrices(view, utils.MakeLookAt(viewMatrixPosition, viewMatrixTarget, viewMatrixUpVector));
+
+    //try lookin instead of lookAt
+    let rot = cardir -180;
+    view = utils.invertMatrix(utils.multiplyMatrices(utils.MakeTranslateMatrix(carx, cary + 3, carz), utils.MakeRotateYMatrix(rot)));
 
     var projection = utils.MakePerspective(60, aspectRatio, 0.1, 1000.0);
 

@@ -95,17 +95,20 @@ void main() {
 	color = pColor;
 }
 `;
-		var program = gl.createProgram();
+
 		var v1 = gl.createShader(gl.VERTEX_SHADER);
 		gl.shaderSource(v1, vs);
 		gl.compileShader(v1);
+
 		var v2 = gl.createShader(gl.FRAGMENT_SHADER);
-		gl.shaderSource(v2, fs)
-		gl.compileShader(v2);		
+		gl.shaderSource(v2, fs);
+		gl.compileShader(v2);	
+
+		var program = gl.createProgram();
 		gl.attachShader(program, v1);
 		gl.attachShader(program, v2);
-		gl.linkProgram(program);				
 		
+		gl.linkProgram(program);				
 		gl.useProgram(program);
 		
 		var vertexPositionHandle = gl.getAttribLocation(program, 'pos1');
