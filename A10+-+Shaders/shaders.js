@@ -35,7 +35,7 @@ function shaders() {
 //float DToonTh;				// Threshold for diffuse in a toon shader
 //float SToonTh;				// Threshold for specular in a toon shader
 //
-//vec4 diffColor;				// diffuse color
+//vec4 diffColor;				// diffuse color --> "diffuse" color of the object
 //vec4 ambColor;				// material ambient color
 //vec4 specularColor;			// specular color
 //vec4 emit;					// emitted color
@@ -52,7 +52,7 @@ var S1 = `
 	vec3 lightDir = LADir;
 	vec4 lightCol = LAlightColor;
 	vec4 diffuse = lightCol * clamp(dot(normalVec, lightDir),0.0,1.0) * diffColor;
-
+	
 	out_color = clamp(diffuse, 0.0, 1.0);
 `;
 

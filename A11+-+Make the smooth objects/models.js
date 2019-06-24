@@ -114,38 +114,41 @@ function buildGeometry() {
     var color3 = [1.0, 1.0, 0.0];
     var slices3 = 4;
 
-    for (var i = 0; i <= slices3; i++) {
-    	vert3[i + 1] = [0.0, 1.0, 0.0];
-    }
-    for (i = 0; i < slices3; i+=2) {
-        vert3[i + 1] = [Math.cos(2 * Math.PI / slices3 * i), -1.0, Math.sin(2 * Math.PI / slices3 * i)];
-        norm3[i + 1] = [Math.cos(2 * Math.PI / slices3 * i), 0.0, Math.sin(2 * Math.PI / slices3 * i)];
-    }
+    // for (var i = 0; i <= slices3; i++) {
+    // 	vert3[i + 1] = [0.0, 1.0, 0.0];
+    // }
+    // for (i = 0; i < slices3; i+=2) {
+    //     vert3[i + 1] = [Math.cos(2 * Math.PI / slices3 * i), -1.0, Math.sin(2 * Math.PI / slices3 * i)];
+    //     norm3[i + 1] = [Math.cos(2 * Math.PI / slices3 * i), 0.0, Math.sin(2 * Math.PI / slices3 * i)];
+    // }
     
-    // Lateral area
-    j = 0
-    for (i = slices3 * 2; i > 0; i--) {
-        ind3[j] = 0;
-        ind3[j + 1] = i;
-        ind3[j + 2] = (i > 1) ? i - 1 : slices3;
-        j += 3
-    }
-    vert3[slices3 + 1] = [0.0, -1.0, 0.0]
-    norm3[slices3 + 1] = [0.0, -1.0, 0.0]
-    j = 0
+    // // Lateral area
+    // j = 0
+    // for (i = slices3 * 2; i > 0; i--) {
+    //     ind3[j] = 0;
+    //     ind3[j + 1] = i;
+    //     ind3[j + 2] = (i > 1) ? i - 1 : slices3;
+    //     j += 3
+    // }
+    // vert3[slices3 + 1] = [0.0, -1.0, 0.0]
+    // norm3[slices3 + 1] = [0.0, -1.0, 0.0]
+    // j = 0
     
-    // Bottm area
-    for (i = 0; i < slices3; i+=2) {
-        vert3[i + 1] = [Math.cos(2 * Math.PI / slices3 * i), -1.0, Math.sin(2 * Math.PI / slices3 * i)];
-        norm3[i + 1] = [0, -1.0, 0];
-    }
-    for (i = 1; i <= slices3; i++) {
-        ind3[3 * slices3 + j] = slices3 + 1;
-        ind3[3 * slices3 + j + 1] = i;
-        ind3[3 * slices3 + j + 2] = (i < slices3) ? i + 1 : 1;
-        j += 3
-    }
+    // // Bottm area
+    // for (i = 0; i < slices3; i+=2) {
+    //     vert3[i + 1] = [Math.cos(2 * Math.PI / slices3 * i), -1.0, Math.sin(2 * Math.PI / slices3 * i)];
+    //     norm3[i + 1] = [0, -1.0, 0];
+    // }
+    // for (i = 1; i <= slices3; i++) {
+    //     ind3[3 * slices3 + j] = slices3 + 1;
+    //     ind3[3 * slices3 + j + 1] = i;
+    //     ind3[3 * slices3 + j + 2] = (i < slices3) ? i + 1 : 1;
+    //     j += 3
+    // }
     addMesh(vert3, norm3, ind3, color3);
+
+
+
 
     // Draws a Sphere
     var phi, theta;
@@ -153,18 +156,22 @@ function buildGeometry() {
     var norm4 = [];
     var ind4 = [];
     var color4 = [0.0, 1.0, 1.0];
-    var sectors = 4;
-    var stacks = 4;
-    var ray = 1;
+    var sectors = 60;
+    var stacks = 60;
+
     for (i = 0; i < sectors; i++)
         for (k = 0; k <= stacks; k++) {
+            //creates the non linear distance between different stacks
             phi = (Math.PI / 2) - Math.PI * k / stacks
+            //creates spaces between the sectors
             theta = (2 * Math.PI) * i / sectors
-            vert4[stacks * i + k] = [(ray * Math.cos(phi) * Math.cos(theta)), ray * Math.sin(phi), (ray * Math.cos(phi) * Math.sin(theta))];
-            norm4[stacks * i + k] = [(ray * Math.cos(phi) * Math.cos(theta)), ray * Math.sin(phi), (ray * Math.cos(phi) * Math.sin(theta))];
+
+            vert4[stacks * i + k] = [(Math.cos(phi) * Math.cos(theta)), Math.sin(phi), (Math.cos(phi) * Math.sin(theta))];
+            norm4[stacks * i + k] = [(Math.cos(phi) * Math.cos(theta)), 0, (Math.cos(phi) * Math.sin(theta))];
         }
     j = 0
-    // Top lateral area
+
+    // Top and Lateral meshes
     for (k = 0; k < stacks - 1; k++) {
         for (i = 0; i < sectors; i++) {
             ind4[j] = (i < sectors - 1) ? stacks * i + k + stacks : 0 + k;
@@ -176,6 +183,7 @@ function buildGeometry() {
             j += 6
         }
     }
+    //Bottom meshes
     for (i = 0; i < sectors; i++) {
         ind4[j] = stacks * sectors
         ind4[j + 1] = (i + 1) * stacks - 1
